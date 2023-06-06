@@ -1,4 +1,4 @@
-package com.example;
+package com.farmAttic;
 
 import io.micronaut.runtime.Micronaut;
 
