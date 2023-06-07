@@ -25,3 +25,30 @@ netty:
   default:
     allocator:
       max-order: 3
+
+
+datasources:
+  default:
+    url: jdbc:postgresql://localhost:5432/postgresql?sslmode=disable
+    driver-class-name: org.postgresql.Driver
+    username: ${USER}
+    password: ${USER}
+    dialect : POSTGRES
+
+
+
+flyway:
+  datasources:
+   default:
+     enabled: true
+     baseline-on-migrate: true
+
+jpa:
+  default:
+    entity-scan:
+      packages: 'com.farmAttic.models'
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: validate
+        show_sql: false
