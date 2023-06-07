@@ -41,9 +41,7 @@ flyway:
   datasources:
    default:
      enabled: true
-     baseline-on-migrate: true
-     locations: 'classpath:db.migrgation'
-
+     locations: 'classpath:db.migration'
 jpa:
   default:
     entity-scan:
