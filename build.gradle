@@ -33,7 +33,7 @@ dependencies {
 }
 
 application {
-    mainClass.set("com.example.Application")
+    mainClass.set("com.farmAttic.Application")
 }
 java {
     sourceCompatibility = JavaVersion.toVersion("17")
@@ -46,7 +46,7 @@ micronaut {
     testRuntime("junit5")
     processing {
         incremental(true)
-        annotations("com.example.*")
+        annotations("com.farmAttic.*")
     }
 }
 
