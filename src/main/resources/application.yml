@@ -29,7 +29,7 @@ netty:
 
 datasources:
   default:
-    url: jdbc:postgresql://localhost:5432/postgresql?sslmode=disable
+    url: jdbc:postgresql://localhost:5431/postgresql?sslmode=disable
     driver-class-name: org.postgresql.Driver
     username: ${USER}
     password: ${USER}

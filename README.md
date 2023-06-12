@@ -1,3 +1,19 @@
+## Pre-Requisite
+
+- Java 18
+- Install docker and psql
+- Postgres - `docker run --name postgres -it -p 5431:5432 -e POSTGRES_USER=$USER -e POSTGRES_PASSWORD=$USER -e POSTGRES_DB=postgresql -d postgres`.
+
+  - Connect postgres locally in port **5431** and db name as **postgresql**.
+  
+## Preferred IDE
+
+- Intellij IDEA
+
+## Commands
+- Running the terminal: `./gradlew clean run`
+- Building: `./gradlew clean build`
+
 ## Micronaut 3.9.2 Documentation
 
 - [User Guide](https://docs.micronaut.io/3.9.2/guide/index.html)
