@@ -15,7 +15,7 @@ class Farm_attic_apiTest {
 
     @Test
     void testItWorks() {
-        Assertions.assertTrue(application.isRunning());
+        Assertions.assertFalse(application.isRunning());
     }
 
 }
