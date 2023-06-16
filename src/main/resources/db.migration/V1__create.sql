@@ -1,5 +1,5 @@
-create table tbl_crop_info(
-    crop_id serial primary key ,
-    crop_name varchar(200),
-    crop_weight int
+create table tbl_product(
+    product_id serial primary key ,
+    product_name varchar(200),
+    quantity int
 );

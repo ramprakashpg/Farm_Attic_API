@@ -6,11 +6,11 @@ import javax.persistence.*;
 
 @Introspected
 @Entity
-@Table(name = "tbl_crop_info")
+@Table(name = "tbl_product")
 public class CropInfo {
 
     @Id
-    @Column(name="crop_id",unique = true,nullable = false)
+    @Column(name="product_id",unique = true,nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int cropId;
 }
