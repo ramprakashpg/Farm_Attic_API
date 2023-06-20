@@ -2,6 +2,7 @@
 
 - Java 18
 - Install docker and psql
+- Export the necessary env variables `$USER` if not exist.
 - Postgres - `docker run --name postgres -it -p 5431:5432 -e POSTGRES_USER=$USER -e POSTGRES_PASSWORD=$USER -e POSTGRES_DB=postgresql -d postgres`.
 
   - Connect postgres locally in port **5431** and db name as **postgresql**.

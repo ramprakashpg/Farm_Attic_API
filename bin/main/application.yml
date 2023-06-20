@@ -1,0 +1,27 @@
+micronaut:
+  http:
+    client:
+      read-timeout: 1m
+
+  application:
+    name: farm_attic_api
+  server:
+    port: 8000
+    cors:
+      enabled: true
+  security:
+    enabled: true
+    token:
+      jwt:
+        enabled: true
+        claims-validators:
+          issuer: '${OIDC_ISSUER:`https://dev-72143172.okta.com/oauth2/default`}'
+        signatures:
+          jwks:
+            okta:
+              url: '${OIDC_ISSUER:`https://dev-72143172.okta.com/oauth2/default`}/v1/keys'
+
+netty:
+  default:
+    allocator:
+      max-order: 3
