@@ -19,12 +19,11 @@ import java.util.UUID;
 @Table(name="tbl_cart")
 public class Cart {
     @Id
-    @Column(name = "cart_id", unique = true, nullable = false)
+    @Column(name = "cart_id", unique = true, nullable = false, length = 36)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private UUID cart_id;
+    private UUID cartId;
 
     @ManyToOne
-    @MapsId
     @JoinColumn(name="user_id",referencedColumnName = "user_id")
     private User userInfo;
 }

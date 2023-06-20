@@ -20,7 +20,7 @@ import java.util.UUID;
 public class ProductImageDetails {
 
     @Id
-    @Column(name="image_id",unique = true,nullable = false)
+    @Column(name="image_id",unique = true,nullable = false, length = 36)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID imageId;
 
@@ -28,7 +28,6 @@ public class ProductImageDetails {
     private byte[] imageData;
 
     @ManyToOne
-    @MapsId
     @JoinColumn(name="product",referencedColumnName = "product_id")
     private ProductInfo productInfo;
 }
