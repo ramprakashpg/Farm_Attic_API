@@ -22,6 +22,6 @@ public class OrderHistoryId implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "product_id")
-    private ProductInfo product;
+    private Product product;
 
 }
