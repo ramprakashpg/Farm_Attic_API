@@ -28,6 +28,6 @@ public class ProductImageDetails {
 
     @ManyToOne
     @MapsId
-    @JoinColumn(name="product")
+    @JoinColumn(name="product",referencedColumnName = "product_id")
     private ProductInfo productInfo;
 }

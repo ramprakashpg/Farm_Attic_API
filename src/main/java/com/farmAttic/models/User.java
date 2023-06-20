@@ -1,13 +1,14 @@
 package com.farmAttic.models;
 
 import io.micronaut.core.annotation.Introspected;
-import io.micronaut.data.annotation.Id;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,10 +19,11 @@ import javax.persistence.*;
 @Entity
 @Table(name="tbl_user")
 public class User {
+
     @Id
-    @Column(name = "user_id",unique = true,nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int userId;
+    @Column(name = "user_id",unique = true,nullable = false ,length = 36)
+    private UUID userId;
 
     @Column(name = "email", nullable = false)
     private String email;

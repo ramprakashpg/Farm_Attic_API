@@ -15,7 +15,7 @@ import javax.persistence.*;
 
 @Introspected
 @Entity
-@Table(name = "tbl_product")
+@Table(name = "tbm_product")
 public class ProductInfo {
 
     @Id
@@ -23,13 +23,19 @@ public class ProductInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int productId;
 
-    @Column(name="product_name")
+    @Column(name="product_name",nullable = false)
     private String productName;
 
-    @Column(name=" product_description")
+    @Column(name=" product_description",nullable = false)
     private String productDescription;
 
-    @Column(name="quantity")
+    @Column(name="quantity",nullable = false)
     private int quantity;
 
+    @Column(name="price",nullable = false)
+    private int price;
+
+    @ManyToOne
+    @JoinColumn(name="user_id",referencedColumnName = "user_id")
+    private User user;
 }

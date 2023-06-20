@@ -11,6 +11,6 @@ create table tbm_product(
     product_description varchar(200),
     price int,
     quantity int,
-    "user" uuid references tbl_user(user_id)
+    user_id UUID references tbl_user(user_id)
 );
 
