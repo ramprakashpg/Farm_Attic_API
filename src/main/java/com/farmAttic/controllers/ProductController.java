@@ -1,7 +1,7 @@
 package com.farmAttic.controllers;
 
 import com.farmAttic.Dtos.ProductDetails;
-import com.farmAttic.models.ProductInfo;
+import com.farmAttic.models.Product;
 import com.farmAttic.services.ProductImageService;
 import com.farmAttic.services.ProductInformationService;
 import io.micronaut.core.annotation.Introspected;
@@ -40,7 +40,7 @@ public class ProductController {
     @Post(value ="product/image")
     @Secured(SecurityRule.IS_AUTHENTICATED)
     public MutableHttpResponse<ProductDetails> saveProductDetails(@Body ProductDetails productRequest, Authentication authentication){
-        ProductInfo productInformationResponse=productInformationService.saveProductInformation(productRequest);
+        Product productInformationResponse=productInformationService.saveProductInformation(productRequest);
         ProductDetails productDetailsResponse = productImageService.saveProductImage(productRequest,productInformationResponse);
         return HttpResponse.ok(productDetailsResponse);
     }

@@ -29,5 +29,5 @@ public class ProductImageDetails {
 
     @ManyToOne
     @JoinColumn(name="product",referencedColumnName = "product_id")
-    private ProductInfo productInfo;
+    private Product product;
 }

@@ -17,7 +17,7 @@ import java.util.UUID;
 @Introspected
 @Entity
 @Table(name = "tbm_product")
-public class ProductInfo {
+public class Product {
 
     @Id
     @Column(name="product_id",unique = true,nullable = false, length = 36)

@@ -1,12 +1,10 @@
 package com.farmAttic.services;
 
 import com.farmAttic.Dtos.ProductDetails;
-import com.farmAttic.models.ProductInfo;
+import com.farmAttic.models.Product;
 import com.farmAttic.repositories.ProductInformationRepository;
 import jakarta.inject.Singleton;
 import org.modelmapper.ModelMapper;
-
-import java.sql.SQLOutput;
 
 @Singleton
 public class ProductInformationService {
@@ -18,11 +16,11 @@ public class ProductInformationService {
         this.productInformationRepository = productInformationRepository;
     }
 
-    public ProductInfo saveProductInformation(ProductDetails productRequest) {
-        ProductInfo productInfo =new ProductInfo();
-        productInfo.setProductDescription(productRequest.getProductDescription());
-        productInfo.setProductName(productRequest.getProductName());
-        productInfo.setQuantity(productRequest.getQuantity());
-        return productInformationRepository.save(productInfo);
+    public Product saveProductInformation(ProductDetails productRequest) {
+        Product product =new Product();
+        product.setProductDescription(productRequest.getProductDescription());
+        product.setProductName(productRequest.getProductName());
+        product.setQuantity(productRequest.getQuantity());
+        return productInformationRepository.save(product);
     }
 }
