@@ -1,10 +1,10 @@
 package com.farmAttic.services;
 
 import com.farmAttic.Dtos.ProductDetails;
-import com.farmAttic.models.ProductImageDetails;
 import com.farmAttic.models.Product;
-import jakarta.inject.Singleton;
+import com.farmAttic.models.ProductImageDetails;
 import com.farmAttic.repositories.ProductImageRepository;
+import jakarta.inject.Singleton;
 
 @Singleton
 public class ProductImageService {
