@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -21,7 +22,7 @@ public class ProductInfo {
     @Id
     @Column(name="product_id",unique = true,nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int productId;
+    private UUID productId;
 
     @Column(name="product_name",nullable = false)
     private String productName;

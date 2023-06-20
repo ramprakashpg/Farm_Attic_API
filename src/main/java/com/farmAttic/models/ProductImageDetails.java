@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,7 +22,7 @@ public class ProductImageDetails {
     @Id
     @Column(name="image_id",unique = true,nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int imageId;
+    private UUID imageId;
 
     @Column(name="image_data")
     private byte[] imageData;

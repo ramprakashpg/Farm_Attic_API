@@ -6,7 +6,7 @@ create table tbl_user(
 );
 
 create table tbm_product(
-    product_id serial primary key ,
+    product_id UUID PRIMARY KEY DEFAULT uuid_in(md5(random()::text || random()::text)::cstring),
     product_name varchar(200),
     product_description varchar(200),
     price int,
