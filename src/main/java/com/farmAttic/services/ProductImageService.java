@@ -6,6 +6,7 @@ import com.farmAttic.models.Product;
 import com.farmAttic.models.ProductImage;
 import com.farmAttic.repositories.ProductImageRepository;
 import jakarta.inject.Singleton;
+import org.modelmapper.ModelMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,32 +15,29 @@ import java.util.List;
 public class ProductImageService {
 
     private final ProductImageRepository productImageRepository;
+    private static final ModelMapper modelMapper = new ModelMapper();
+
 
     public ProductImageService(ProductImageRepository productImageRepository) {
         this.productImageRepository = productImageRepository;
     }
 
     public ProductRequest saveProductImage(ProductRequest productRequest, Product product) {
-        List<ProductImageDto> imageDtoList=new ArrayList<>();
-        for(ProductImageDto productImageDto : productRequest.getImageList()) {
+        List<ProductImageDto> imageDtoList = new ArrayList<>();
+        for (ProductImageDto productImageDto : productRequest.getImageList()) {
             ProductImage productImage = new ProductImage();
             productImage.setImageData(productImageDto.getImageData());
             productImage.setProduct(product);
             ProductImage productImage1 = productImageRepository.save(productImage);
-            ProductImageDto productImageResponse=new ProductImageDto();
+            ProductImageDto productImageResponse = new ProductImageDto();
             productImageResponse.setImageData(productImage1.getImageData());
             imageDtoList.add(productImageResponse);
         }
-        return  getProductDetailsResponse(imageDtoList,product);
+        return getProductDetailsResponse(imageDtoList, product);
     }
 
     private ProductRequest getProductDetailsResponse(List<ProductImageDto> imageDtoList, Product product) {
-        ProductRequest productResponse=new ProductRequest();
-        productResponse.setUserId(product.getUser().getUserId());
-        productResponse.setProductName(product.getProductName());
-        productResponse.setProductDescription(product.getProductDescription());
-        productResponse.setPrice(product.getPrice());
-        productResponse.setQuantity(product.getQuantity());
+        ProductRequest productResponse = modelMapper.map(product, ProductRequest.class);
         productResponse.setImageList(imageDtoList);
         return productResponse;
     }
