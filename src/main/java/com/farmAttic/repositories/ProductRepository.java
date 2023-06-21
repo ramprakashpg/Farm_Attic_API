@@ -7,5 +7,5 @@ import io.micronaut.data.repository.CrudRepository;
 import java.util.UUID;
 
 @Repository
-public interface ProductInformationRepository extends CrudRepository<Product, UUID> {
+public interface ProductRepository extends CrudRepository<Product, UUID> {
 }

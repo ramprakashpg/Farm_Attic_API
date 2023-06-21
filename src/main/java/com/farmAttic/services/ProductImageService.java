@@ -1,6 +1,6 @@
 package com.farmAttic.services;
 
-import com.farmAttic.Dtos.ProductDetails;
+import com.farmAttic.Dtos.ProductRequest;
 import com.farmAttic.models.Product;
 import com.farmAttic.models.ProductImageDetails;
 import com.farmAttic.repositories.ProductImageRepository;
@@ -15,14 +15,14 @@ public class ProductImageService {
         this.productImageRepository = productImageRepository;
     }
 
-    public ProductDetails saveProductImage(ProductDetails productRequest, Product productInformationResponse) {
+    public ProductRequest saveProductImage(ProductRequest productRequest, Product productInformationResponse) {
         ProductImageDetails productImageDetails=new ProductImageDetails();
         productImageDetails.setImageData(productRequest.getImageData());
         productImageDetails.setProduct(productInformationResponse);
         ProductImageDetails productImageDetailsResponse = productImageRepository.save(productImageDetails);
-        ProductDetails productDetailsResponse = new ProductDetails();
-        productDetailsResponse.setProductName(productImageDetailsResponse.getProduct().getProductName());
-        productDetailsResponse.setImageData(productRequest.getImageData());
-        return productDetailsResponse;
+        ProductRequest productRequestResponse = new ProductRequest();
+        productRequestResponse.setProductName(productImageDetailsResponse.getProduct().getProductName());
+        productRequestResponse.setImageData(productRequest.getImageData());
+        return productRequestResponse;
     }
 }

@@ -1,18 +1,19 @@
 package com.farmAttic.controllers;
 
-import com.farmAttic.Dtos.ProductDetails;
+import com.farmAttic.Dtos.ProductRequest;
 import com.farmAttic.models.Product;
 import com.farmAttic.services.ProductImageService;
-import com.farmAttic.services.ProductInformationService;
+import com.farmAttic.services.ProductService;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MutableHttpResponse;
 import io.micronaut.http.annotation.Body;
-import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.rules.SecurityRule;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.transaction.Transactional;
 
@@ -21,28 +22,24 @@ import javax.transaction.Transactional;
 @Transactional
 public class ProductController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProductController.class);
+
     private final ProductImageService productImageService;
-    private final ProductInformationService productInformationService;
+    private final ProductService productService;
 
-    public ProductController(ProductImageService productImageService, ProductInformationService productInformationService) {
+    public ProductController(ProductImageService productImageService, ProductService productService) {
         this.productImageService = productImageService;
-        this.productInformationService = productInformationService;
+        this.productService = productService;
     }
 
 
-    @Get
+    @Post(value ="user/product")
     @Secured(SecurityRule.IS_AUTHENTICATED)
-    public HttpResponse check(Authentication authentication){
-        return HttpResponse.ok();
-    }
-
-
-    @Post(value ="product/image")
-    @Secured(SecurityRule.IS_AUTHENTICATED)
-    public MutableHttpResponse<ProductDetails> saveProductDetails(@Body ProductDetails productRequest, Authentication authentication){
-        Product productInformationResponse=productInformationService.saveProductInformation(productRequest);
-        ProductDetails productDetailsResponse = productImageService.saveProductImage(productRequest,productInformationResponse);
-        return HttpResponse.ok(productDetailsResponse);
+    public MutableHttpResponse<ProductRequest> saveProduct(@Body ProductRequest productRequest, Authentication authentication){
+        LOGGER.info("{} : Save Product",authentication.getName());
+        Product product= productService.saveProductInformation(productRequest);
+        ProductRequest productRequestResponse = productImageService.saveProductImage(productRequest,product);
+        return HttpResponse.ok(productRequestResponse);
     }
 
 }
