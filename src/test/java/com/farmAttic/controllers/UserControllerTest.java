@@ -3,7 +3,6 @@ package com.farmAttic.controllers;
 import com.farmAttic.services.UserAuthService;
 import io.micronaut.security.authentication.Authentication;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito.*;
 
 import static org.mockito.Mockito.*;
 
