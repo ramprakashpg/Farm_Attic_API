@@ -12,7 +12,8 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductRequest {
+public class ProductDto {
+    private UUID productId;
     private UUID userId;
     private String productName;
     private String productDescription;
