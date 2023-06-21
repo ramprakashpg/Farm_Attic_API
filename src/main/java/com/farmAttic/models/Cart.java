@@ -20,7 +20,7 @@ import java.util.UUID;
 public class Cart {
     @Id
     @Column(name = "cart_id", unique = true, nullable = false, length = 36)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private UUID cartId;
 
     @ManyToOne

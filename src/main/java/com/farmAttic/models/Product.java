@@ -21,7 +21,7 @@ public class Product {
 
     @Id
     @Column(name="product_id",unique = true,nullable = false, length = 36)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private UUID productId;
 
     @Column(name="product_name",nullable = false)

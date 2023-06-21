@@ -21,7 +21,7 @@ public class ProductImageDetails {
 
     @Id
     @Column(name="image_id",unique = true,nullable = false, length = 36)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private UUID imageId;
 
     @Column(name="image_data")

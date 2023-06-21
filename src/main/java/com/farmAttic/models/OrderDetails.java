@@ -19,7 +19,7 @@ import java.util.UUID;
 public class OrderDetails {
     @Id
     @Column(name = "order_id", unique = true, nullable = false, length = 36)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private UUID orderId;
 
     @ManyToOne
