@@ -10,24 +10,23 @@ import org.modelmapper.ModelMapper;
 @Singleton
 public class ProductService {
     private final ProductRepository productRepository;
-    private final UserService userService;
+    private final UserAuthService userAuthService;
     private static final ModelMapper mapper = new ModelMapper();
 
 
-    public ProductService(ProductRepository productRepository, UserService userService) {
+    public ProductService(ProductRepository productRepository, UserAuthService userAuthService) {
         this.productRepository = productRepository;
-        this.userService = userService;
+        this.userAuthService = userAuthService;
     }
 
     public Product saveProductInformation(ProductRequest productRequest) {
-        System.out.println("request"+productRequest.getUserId());
-        Product product =new Product();
-        User user=userService.getUser(productRequest.getUserId());
+        Product product=new Product();
+        User user=userAuthService.getUser(productRequest.getUserId());
         product.setUser(user);
         product.setProductName(productRequest.getProductName());
-        product.setQuantity(productRequest.getQuantity());
         product.setProductDescription(productRequest.getProductDescription());
         product.setPrice(productRequest.getPrice());
+        product.setQuantity(productRequest.getQuantity());
         return productRepository.save(product);
     }
 }

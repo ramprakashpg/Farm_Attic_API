@@ -10,6 +10,8 @@ import jakarta.inject.Singleton;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 
+import java.util.UUID;
+
 @Singleton
 @AllArgsConstructor
 public class UserAuthService {
@@ -25,5 +27,9 @@ public class UserAuthService {
             User user = modelMapper.map(userInfo, User.class);
             userRepository.save(user);
         }
+    }
+
+    public User getUser(UUID userId) {
+        return userRepository.findById(userId).orElseThrow();
     }
 }

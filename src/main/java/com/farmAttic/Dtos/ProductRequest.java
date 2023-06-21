@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -16,5 +18,5 @@ public class ProductRequest {
     private String productDescription;
     private Integer quantity;
     private Integer price;
-    private byte[] imageData;
+    private List<ProductImageDto> imageList;
 }

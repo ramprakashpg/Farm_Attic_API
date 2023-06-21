@@ -6,6 +6,7 @@ import com.farmAttic.services.ProductImageService;
 import com.farmAttic.services.ProductService;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.http.HttpResponse;
+import io.micronaut.http.MediaType;
 import io.micronaut.http.MutableHttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Post;
@@ -33,13 +34,13 @@ public class ProductController {
     }
 
 
-    @Post(value ="user/product")
+    @Post(value ="/products",produces = MediaType.APPLICATION_JSON)
     @Secured(SecurityRule.IS_AUTHENTICATED)
-    public MutableHttpResponse<ProductRequest> saveProduct(@Body ProductRequest productRequest, Authentication authentication){
+    public HttpResponse<ProductRequest> saveProduct(@Body ProductRequest productRequest, Authentication authentication){
         LOGGER.info("{} : Save Product",authentication.getName());
         Product product= productService.saveProductInformation(productRequest);
-        ProductRequest productRequestResponse = productImageService.saveProductImage(productRequest,product);
-        return HttpResponse.ok(productRequestResponse);
+        ProductRequest productResponse = productImageService.saveProductImage(productRequest,product);
+        return HttpResponse.ok(productResponse);
     }
 
 }

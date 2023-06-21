@@ -1,10 +1,14 @@
 package com.farmAttic.services;
 
+import com.farmAttic.Dtos.ProductImageDto;
 import com.farmAttic.Dtos.ProductRequest;
 import com.farmAttic.models.Product;
-import com.farmAttic.models.ProductImageDetails;
+import com.farmAttic.models.ProductImage;
 import com.farmAttic.repositories.ProductImageRepository;
 import jakarta.inject.Singleton;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Singleton
 public class ProductImageService {
@@ -15,14 +19,30 @@ public class ProductImageService {
         this.productImageRepository = productImageRepository;
     }
 
-    public ProductRequest saveProductImage(ProductRequest productRequest, Product productInformationResponse) {
-        ProductImageDetails productImageDetails=new ProductImageDetails();
-        productImageDetails.setImageData(productRequest.getImageData());
-        productImageDetails.setProduct(productInformationResponse);
-        ProductImageDetails productImageDetailsResponse = productImageRepository.save(productImageDetails);
-        ProductRequest productRequestResponse = new ProductRequest();
-        productRequestResponse.setProductName(productImageDetailsResponse.getProduct().getProductName());
-        productRequestResponse.setImageData(productRequest.getImageData());
-        return productRequestResponse;
+    public ProductRequest saveProductImage(ProductRequest productRequest, Product product) {
+        List<ProductImageDto> imageDtoList=new ArrayList<>();
+        for(ProductImageDto productImageDto : productRequest.getImageList()) {
+            ProductImage productImage = new ProductImage();
+            productImage.setImageData(productImageDto.getImageData());
+            productImage.setProduct(product);
+            ProductImage productImage1 = productImageRepository.save(productImage);
+            ProductImageDto productImageResponse=new ProductImageDto();
+            productImageResponse.setImageData(productImage1.getImageData());
+            imageDtoList.add(productImageResponse);
+        }
+        return  getProductDetailsResponse(imageDtoList,product);
     }
+
+    private ProductRequest getProductDetailsResponse(List<ProductImageDto> imageDtoList, Product product) {
+        ProductRequest productResponse=new ProductRequest();
+        productResponse.setUserId(product.getUser().getUserId());
+        productResponse.setProductName(product.getProductName());
+        productResponse.setProductDescription(product.getProductDescription());
+        productResponse.setPrice(product.getPrice());
+        productResponse.setQuantity(product.getQuantity());
+        productResponse.setImageList(imageDtoList);
+        return productResponse;
+    }
+
+
 }

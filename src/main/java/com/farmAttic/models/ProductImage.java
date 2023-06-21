@@ -17,7 +17,7 @@ import java.util.UUID;
 @Introspected
 @Entity
 @Table(name="tbl_product_image")
-public class ProductImageDetails {
+public class ProductImage {
 
     @Id
     @Column(name="image_id",unique = true,nullable = false, length = 36)
