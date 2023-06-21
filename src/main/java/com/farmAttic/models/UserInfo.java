@@ -16,20 +16,19 @@ import java.util.UUID;
 
 @Introspected
 @Entity
-@Table(name="tbm_user")
-public class User {
-
+@Table(name="tbm_user_details")
+public class UserInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id",unique = true,nullable = false ,length = 36)
     private UUID userId;
 
-    @Column(name = "email", nullable = false)
-    private String email;
+    @Column(name = "postal_address", nullable = false)
+    private String postalAddress;
 
-    @Column(name = "first_name", nullable = false)
-    private String firstName;
+    @Column(name = "contact", nullable = false)
+    private int contact;
 
-    @Column(name = "last_name", nullable = false)
-    private String lastName;
+    @Column(name = "zip_code", nullable = false)
+    private int zipCode;
 }
