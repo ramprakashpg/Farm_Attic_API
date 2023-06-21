@@ -1,9 +1,8 @@
 package com.farmAttic.services;
 
-import com.farmAttic.Dtos.UserInfoDto;
+import com.farmAttic.Dtos.UserDto;
 import com.farmAttic.client.UserInfoClient;
 import com.farmAttic.models.User;
-import com.farmAttic.models.UserInfo;
 import com.farmAttic.repositories.UserRepository;
 import io.micronaut.security.authentication.Authentication;
 import jakarta.inject.Singleton;
@@ -23,7 +22,7 @@ public class UserAuthService {
         String email = authentication.getAttributes().get("sub").toString();
         User currentUser = userRepository.findByEmail(email).orElse(new User());
         if(currentUser.getUserId() == null) {
-            UserInfoDto userInfo = userInfoClient.getUserInfo(authorizationHeader);
+            UserDto userInfo = userInfoClient.getUserInfo(authorizationHeader);
             User user = modelMapper.map(userInfo, User.class);
             userRepository.save(user);
         }

@@ -1,7 +1,5 @@
 package com.farmAttic.controllers;
 
-import com.farmAttic.Dtos.UserInfoDto;
-import com.farmAttic.client.UserInfoClient;
 import com.farmAttic.services.UserAuthService;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.http.annotation.Controller;
@@ -27,6 +25,5 @@ public class UserController {
     public void login(@Header("authorization") String authorizationHeader, Authentication authentication){
         userAuthService.login(authorizationHeader, authentication);
     }
-
 
 }
