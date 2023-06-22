@@ -19,7 +19,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
 
-@io.micronaut.http.annotation.Controller("v1/products")
+@io.micronaut.http.annotation.Controller("v1/product")
 @Introspected
 @Transactional
 public class ProductController {
@@ -44,7 +44,7 @@ public class ProductController {
     @Get(produces = MediaType.APPLICATION_JSON)
     @Secured(SecurityRule.IS_AUTHENTICATED)
     public HttpResponse<List<ProductDto>> getAllProducts(Authentication authentication){
-        LOGGER.info("Get all the products {}",authentication.getName());
+        LOGGER.info("Get all product details: {}",authentication.getName());
         List<ProductDto> productsResponseList=productService.getProducts();
         return HttpResponse.ok(productsResponseList);
     }
@@ -52,7 +52,7 @@ public class ProductController {
     @Get(value = "/{userId}",produces = MediaType.APPLICATION_JSON)
     @Secured(SecurityRule.IS_AUTHENTICATED)
     public HttpResponse<List<ProductDto>> getUserProducts(@PathVariable UUID userId,Authentication authentication){
-        LOGGER.info("Get Products of User {} for {}",userId ,authentication.getName());
+        LOGGER.info("Get Products for User id:{} - {}",userId ,authentication.getName());
         List<ProductDto> productsList = productService.getUserProducts(userId);
         return HttpResponse.ok(productsList);
     }

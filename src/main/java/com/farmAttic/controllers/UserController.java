@@ -14,6 +14,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.transaction.Transactional;
 
+import static com.farmAttic.AuthConstant.EMAIL;
+
 @Controller("v1/user")
 @Introspected
 @Transactional
@@ -25,7 +27,7 @@ public class UserController {
     @Get("/login")
     @Secured(SecurityRule.IS_AUTHENTICATED)
     public void login(@Header("authorization") String authorizationHeader, Authentication authentication){
-        LOGGER.info("Logged in user:{}",authentication.getAttributes().get("sub"));
+        LOGGER.info("Logged in user:{}",authentication.getAttributes().get(EMAIL));
         userAuthService.login(authorizationHeader, authentication);
     }
 
