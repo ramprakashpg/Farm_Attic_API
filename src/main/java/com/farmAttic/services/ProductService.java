@@ -11,6 +11,8 @@ import org.modelmapper.ModelMapper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Singleton
 public class ProductService {
@@ -78,4 +80,9 @@ public class ProductService {
         return imageDtoList;
     }
 
+
+    public List<ProductDto> getUserProducts(UUID userId) {
+        List<ProductDto> productsResponse= getProducts();
+       return productsResponse.stream().filter(eachProduct -> eachProduct.getUserId().equals(userId)).collect(Collectors.toList());
+    }
 }

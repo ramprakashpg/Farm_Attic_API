@@ -7,6 +7,7 @@ import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.authentication.Authentication;
@@ -16,8 +17,9 @@ import org.slf4j.LoggerFactory;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.UUID;
 
-@io.micronaut.http.annotation.Controller("v1/")
+@io.micronaut.http.annotation.Controller("v1/products")
 @Introspected
 @Transactional
 public class ProductController {
@@ -31,7 +33,7 @@ public class ProductController {
     }
 
 
-    @Post(value ="/products",produces = MediaType.APPLICATION_JSON)
+    @Post(produces = MediaType.APPLICATION_JSON)
     @Secured(SecurityRule.IS_AUTHENTICATED)
     public HttpResponse<ProductDto> saveProduct(@Body ProductDto productRequest, Authentication authentication){
         LOGGER.info("{} : Save Product",authentication.getName());
@@ -41,11 +43,19 @@ public class ProductController {
 
     @Get(produces = MediaType.APPLICATION_JSON)
     @Secured(SecurityRule.IS_AUTHENTICATED)
-    public HttpResponse<List<ProductDto>> getProducts(){
+    public HttpResponse<List<ProductDto>> getAllProducts(){
         LOGGER.info("Get all the products");
-        List<ProductDto> productResponseList=productService.getProducts();
-        return HttpResponse.ok(productResponseList);
+        List<ProductDto> productsResponseList=productService.getProducts();
+        return HttpResponse.ok(productsResponseList);
     }
 
+    @Get(value = "/{userId}",produces = MediaType.APPLICATION_JSON)
+    @Secured(SecurityRule.IS_AUTHENTICATED)
+    public HttpResponse<List<ProductDto>> getUserProducts(@PathVariable UUID userId){
+        LOGGER.info("Get Products of User {}",userId);
+        List<ProductDto> productsList = productService.getUserProducts(userId);
+        return HttpResponse.ok(productsList);
+
+    }
 
 }
