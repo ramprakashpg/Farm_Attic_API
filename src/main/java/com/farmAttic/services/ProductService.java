@@ -1,7 +1,6 @@
 package com.farmAttic.services;
 
 import com.farmAttic.Dtos.ProductDto;
-import com.farmAttic.Dtos.ProductImageDto;
 import com.farmAttic.models.Product;
 import com.farmAttic.models.ProductImage;
 import com.farmAttic.models.User;
@@ -17,18 +16,18 @@ import java.util.List;
 public class ProductService {
     private final ProductRepository productRepository;
 
-    private final ProductImageRepository productImageRepository;
+    private final ProductImageService productImageService;
     private final UserAuthService userAuthService;
-    private static final ModelMapper mapper = new ModelMapper();
+    private static final ModelMapper modelMapper = new ModelMapper();
 
 
-    public ProductService(ProductRepository productRepository, ProductImageRepository productImageRepository, UserAuthService userAuthService) {
+    public ProductService(ProductRepository productRepository,ProductImageService productImageService, UserAuthService userAuthService) {
         this.productRepository = productRepository;
-        this.productImageRepository = productImageRepository;
+        this.productImageService = productImageService;
         this.userAuthService = userAuthService;
     }
 
-    public Product saveProductInformation(ProductDto productRequest) {
+    public ProductDto saveProductInformation(ProductDto productRequest) {
         Product product=new Product();
         User user=userAuthService.getUser(productRequest.getUserId());
         product.setUser(user);
@@ -36,28 +35,45 @@ public class ProductService {
         product.setProductDescription(productRequest.getProductDescription());
         product.setPrice(productRequest.getPrice());
         product.setQuantity(productRequest.getQuantity());
-        return productRepository.save(product);
+        Product product1= productRepository.save(product);
+        return saveImage(product1,productRequest);
     }
 
-    public List<ProductDto> getProducts() {
-        List<Product> products=productRepository.findAll();
-        List<ProductDto> productResponse =new ArrayList<>();
-        products.forEach(product ->{
-            ProductDto response = mapper.map(product,ProductDto.class);
-            List<ProductImageDto> imageDtoList=getProductImages(product);
-            response.setImageList(imageDtoList);
-            productResponse.add(response);
-        });
+    private ProductDto saveImage(Product product, ProductDto productRequest) {
+        for(byte[] productImageDto : productRequest.getImageList()) {
+            ProductImage productImage = new ProductImage();
+            productImage.setImageData(productImageDto);
+            productImage.setProduct(product);
+            productImageService.save(productImage);
+        }
+        return getProductResponse(product);
+    }
+
+    private ProductDto getProductResponse(Product product) {
+        ProductDto productResponse = modelMapper.map(product, ProductDto.class);
+        List<byte[]> imageDtoList=getProductImages(product);
+        productResponse.setImageList(imageDtoList);
         return productResponse;
     }
 
-    private List<ProductImageDto> getProductImages(Product product) {
-        List<ProductImageDto> imageDtoList=new ArrayList<>();
-        List<ProductImage> productImages=productImageRepository.findByProduct(product);
+
+    public List<ProductDto> getProducts() {
+        List<Product> products=productRepository.findAll();
+        List<ProductDto> productsResponse =new ArrayList<>();
+        products.forEach(product ->{
+            ProductDto response = modelMapper.map(product,ProductDto.class);
+            List<byte[]> imageDtoList=getProductImages(product);
+            response.setImageList(imageDtoList);
+            productsResponse.add(response);
+        });
+        return productsResponse;
+    }
+
+    private List<byte[]> getProductImages(Product product) {
+        List<byte []> imageDtoList=new ArrayList<>();
+        List<ProductImage> productImages=productImageService.findByProduct(product);
         productImages.forEach(productImage -> {
-            ProductImageDto productImageDto=new ProductImageDto();
-            productImageDto.setImageData(productImage.getImageData());
-            imageDtoList.add(productImageDto);
+            imageDtoList.add(productImage.getImageData());
         });
         return imageDtoList;
     }

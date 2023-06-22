@@ -1,8 +1,6 @@
 package com.farmAttic.controllers;
 
 import com.farmAttic.Dtos.ProductDto;
-import com.farmAttic.models.Product;
-import com.farmAttic.services.ProductImageService;
 import com.farmAttic.services.ProductService;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.http.HttpResponse;
@@ -26,11 +24,9 @@ public class ProductController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductController.class);
 
-    private final ProductImageService productImageService;
     private final ProductService productService;
 
-    public ProductController(ProductImageService productImageService, ProductService productService) {
-        this.productImageService = productImageService;
+    public ProductController(ProductService productService) {
         this.productService = productService;
     }
 
@@ -39,8 +35,7 @@ public class ProductController {
     @Secured(SecurityRule.IS_AUTHENTICATED)
     public HttpResponse<ProductDto> saveProduct(@Body ProductDto productRequest, Authentication authentication){
         LOGGER.info("{} : Save Product",authentication.getName());
-        Product product= productService.saveProductInformation(productRequest);
-        ProductDto productResponse = productImageService.saveProductImage(productRequest,product);
+        ProductDto productResponse= productService.saveProductInformation(productRequest);
         return HttpResponse.ok(productResponse);
     }
 

@@ -19,5 +19,5 @@ public class ProductDto {
     private String productDescription;
     private Integer quantity;
     private Integer price;
-    private List<ProductImageDto> imageList;
+    private List<byte []> imageList;
 }
