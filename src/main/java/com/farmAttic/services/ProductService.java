@@ -23,26 +23,43 @@ public class ProductService {
     private static final ModelMapper modelMapper = new ModelMapper();
 
 
-    public ProductService(ProductRepository productRepository,ProductImageService productImageService, UserAuthService userAuthService) {
+    public ProductService(ProductRepository productRepository, ProductImageService productImageService, UserAuthService userAuthService) {
         this.productRepository = productRepository;
         this.productImageService = productImageService;
         this.userAuthService = userAuthService;
     }
 
     public ProductDto saveProductInformation(ProductDto productRequest) {
-        Product product=new Product();
-        User user=userAuthService.getUser(productRequest.getUserId());
+        Product product = new Product();
+        User user = userAuthService.getUser(productRequest.getUserId());
         product.setUser(user);
         product.setProductName(productRequest.getProductName());
         product.setProductDescription(productRequest.getProductDescription());
         product.setPrice(productRequest.getPrice());
         product.setQuantity(productRequest.getQuantity());
-        Product product1= productRepository.save(product);
-        return saveImage(product1,productRequest);
+        Product product1 = productRepository.save(product);
+        return saveImage(product1, productRequest);
+    }
+
+    public List<ProductDto> getUserProducts(UUID userId) {
+        List<ProductDto> productsResponse = getProducts();
+        return productsResponse.stream().filter(eachProduct -> eachProduct.getUserId().equals(userId)).collect(Collectors.toList());
+    }
+
+    public List<ProductDto> getProducts() {
+        List<Product> products = productRepository.findAll();
+        List<ProductDto> productsResponse = new ArrayList<>();
+        products.forEach(product -> {
+            ProductDto response = modelMapper.map(product, ProductDto.class);
+            List<byte[]> imageDtoList = getProductImages(product);
+            response.setImageList(imageDtoList);
+            productsResponse.add(response);
+        });
+        return productsResponse;
     }
 
     private ProductDto saveImage(Product product, ProductDto productRequest) {
-        for(byte[] productImageDto : productRequest.getImageList()) {
+        for (byte[] productImageDto : productRequest.getImageList()) {
             ProductImage productImage = new ProductImage();
             productImage.setImageData(productImageDto);
             productImage.setProduct(product);
@@ -53,27 +70,15 @@ public class ProductService {
 
     private ProductDto getProductResponse(Product product) {
         ProductDto productResponse = modelMapper.map(product, ProductDto.class);
-        List<byte[]> imageDtoList=getProductImages(product);
+        List<byte[]> imageDtoList = getProductImages(product);
         productResponse.setImageList(imageDtoList);
         return productResponse;
     }
 
 
-    public List<ProductDto> getProducts() {
-        List<Product> products=productRepository.findAll();
-        List<ProductDto> productsResponse =new ArrayList<>();
-        products.forEach(product ->{
-            ProductDto response = modelMapper.map(product,ProductDto.class);
-            List<byte[]> imageDtoList=getProductImages(product);
-            response.setImageList(imageDtoList);
-            productsResponse.add(response);
-        });
-        return productsResponse;
-    }
-
     private List<byte[]> getProductImages(Product product) {
-        List<byte []> imageDtoList=new ArrayList<>();
-        List<ProductImage> productImages=productImageService.findByProduct(product);
+        List<byte[]> imageDtoList = new ArrayList<>();
+        List<ProductImage> productImages = productImageService.findByProduct(product);
         productImages.forEach(productImage -> {
             imageDtoList.add(productImage.getImageData());
         });
@@ -81,8 +86,4 @@ public class ProductService {
     }
 
 
-    public List<ProductDto> getUserProducts(UUID userId) {
-        List<ProductDto> productsResponse= getProducts();
-       return productsResponse.stream().filter(eachProduct -> eachProduct.getUserId().equals(userId)).collect(Collectors.toList());
-    }
 }

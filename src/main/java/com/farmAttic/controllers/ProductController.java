@@ -43,19 +43,18 @@ public class ProductController {
 
     @Get(produces = MediaType.APPLICATION_JSON)
     @Secured(SecurityRule.IS_AUTHENTICATED)
-    public HttpResponse<List<ProductDto>> getAllProducts(){
-        LOGGER.info("Get all the products");
+    public HttpResponse<List<ProductDto>> getAllProducts(Authentication authentication){
+        LOGGER.info("Get all the products {}",authentication.getName());
         List<ProductDto> productsResponseList=productService.getProducts();
         return HttpResponse.ok(productsResponseList);
     }
 
     @Get(value = "/{userId}",produces = MediaType.APPLICATION_JSON)
     @Secured(SecurityRule.IS_AUTHENTICATED)
-    public HttpResponse<List<ProductDto>> getUserProducts(@PathVariable UUID userId){
-        LOGGER.info("Get Products of User {}",userId);
+    public HttpResponse<List<ProductDto>> getUserProducts(@PathVariable UUID userId,Authentication authentication){
+        LOGGER.info("Get Products of User {} for {}",userId ,authentication.getName());
         List<ProductDto> productsList = productService.getUserProducts(userId);
         return HttpResponse.ok(productsList);
-
     }
 
 }
