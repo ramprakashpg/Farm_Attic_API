@@ -31,7 +31,7 @@ dependencies {
 
 
     compileOnly "io.micronaut:micronaut-aop"
-    testImplementation("org.mockito:mockito-all:1.10.19")
+    testImplementation 'org.mockito:mockito-core:4.2.0'
     compileOnly "org.projectlombok:lombok:1.18.24"
     compileOnly "com.google.code.findbugs:jsr305"
     annotationProcessor "org.projectlombok:lombok:1.18.24"
@@ -41,8 +41,8 @@ application {
     mainClass.set("com.farmAttic.Application")
 }
 java {
-    sourceCompatibility = JavaVersion.toVersion("11")
-    targetCompatibility = JavaVersion.toVersion("11")
+    sourceCompatibility = JavaVersion.toVersion("17")
+    targetCompatibility = JavaVersion.toVersion("17")
 }
 
 graalvmNative.toolchainDetection = false
