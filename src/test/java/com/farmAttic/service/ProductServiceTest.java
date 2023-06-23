@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.mockito.Mockito.*;
@@ -89,7 +90,6 @@ public class ProductServiceTest {
     @Test
     void shouldGetUserProducts() {
         List<Product> products = new ArrayList<>();
-        Product product = Product.builder().productId(uuid).productName(productRequest.getProductName()).productDescription(productRequest.getProductDescription()).quantity(productRequest.getQuantity()).price(productRequest.getPrice()).user(user).build();
         products.add(product);
 
         when(productRepository.findAll()).thenReturn(products);
@@ -98,6 +98,37 @@ public class ProductServiceTest {
 
         Assertions.assertEquals(1, productResponse.size());
 
+    }
+
+    @Test
+    void  shouldUpdateProduct() {
+
+        UUID productId =UUID.randomUUID();
+        product.setProductId(productId);
+
+        when(productRepository.findById(productId)).thenReturn(Optional.ofNullable(product));
+        when(userAuthService.getUser(productRequest.getUserId())).thenReturn(user);
+        when(productRepository.update(product)).thenReturn(product);
+
+        productService.updateProduct(productId,productRequest);
+
+        verify(productRepository).update(product);
+    }
+
+    @Test
+    void  shouldUpdateProductWithEmptyImageList() {
+
+        UUID productId =UUID.randomUUID();
+        product.setProductId(productId);
+        productRequest.setImageList(new ArrayList<>());
+
+        when(productRepository.findById(productId)).thenReturn(Optional.ofNullable(product));
+        when(userAuthService.getUser(productRequest.getUserId())).thenReturn(user);
+        when(productRepository.update(product)).thenReturn(product);
+
+        productService.updateProduct(productId,productRequest);
+
+        verify(productRepository).update(product);
     }
 }
 

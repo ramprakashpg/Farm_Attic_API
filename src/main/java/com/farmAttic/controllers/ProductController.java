@@ -5,10 +5,7 @@ import com.farmAttic.services.ProductService;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
-import io.micronaut.http.annotation.Body;
-import io.micronaut.http.annotation.Get;
-import io.micronaut.http.annotation.PathVariable;
-import io.micronaut.http.annotation.Post;
+import io.micronaut.http.annotation.*;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.rules.SecurityRule;
@@ -16,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,7 +33,7 @@ public class ProductController {
 
     @Post(produces = MediaType.APPLICATION_JSON)
     @Secured(SecurityRule.IS_AUTHENTICATED)
-    public HttpResponse<ProductDto> saveProduct(@Body ProductDto productRequest, Authentication authentication){
+    public HttpResponse<ProductDto> saveProduct( @Valid @Body ProductDto productRequest, Authentication authentication){
         LOGGER.info("{} : Save Product",authentication.getName());
         ProductDto productResponse= productService.saveProductInformation(productRequest);
         return HttpResponse.ok(productResponse);
@@ -57,4 +55,11 @@ public class ProductController {
         return HttpResponse.ok(productsList);
     }
 
+    @Put(value="/{productId}",produces = MediaType.APPLICATION_JSON)
+    @Secured(SecurityRule.IS_AUTHENTICATED)
+    public HttpResponse<ProductDto> updateProduct(@PathVariable UUID productId, @Valid @Body ProductDto productRequest, Authentication authentication){
+        LOGGER.info("update product :{} by {}",productId,authentication.getName());
+        ProductDto productResponse = productService.updateProduct(productId,productRequest);
+        return HttpResponse.ok(productResponse);
+    }
 }

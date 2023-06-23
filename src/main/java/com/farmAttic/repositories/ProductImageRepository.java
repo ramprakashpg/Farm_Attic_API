@@ -17,4 +17,8 @@ public interface ProductImageRepository extends CrudRepository<ProductImage, UUI
     @Executable
     @Query("select productImage from ProductImage  productImage where productImage.product=:product")
     List<ProductImage> findByProduct(Product product);
+
+    @Executable
+    @Query("delete from ProductImage productImage where productImage.product.productId=:productId")
+    void deleteByProduct(UUID productId);
 }

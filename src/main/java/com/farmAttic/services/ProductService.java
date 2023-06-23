@@ -4,7 +4,6 @@ import com.farmAttic.Dtos.ProductDto;
 import com.farmAttic.models.Product;
 import com.farmAttic.models.ProductImage;
 import com.farmAttic.models.User;
-import com.farmAttic.repositories.ProductImageRepository;
 import com.farmAttic.repositories.ProductRepository;
 import jakarta.inject.Singleton;
 import org.modelmapper.ModelMapper;
@@ -86,4 +85,26 @@ public class ProductService {
     }
 
 
+    public ProductDto updateProduct(UUID productId, ProductDto productRequest) {
+        Product product=productRepository.findById(productId).orElseThrow();
+        User user =userAuthService.getUser(productRequest.getUserId());
+        product.setProductName(productRequest.getProductName());
+        product.setProductDescription(productRequest.getProductDescription());
+        product.setPrice(productRequest.getPrice());
+        product.setQuantity(productRequest.getQuantity());
+        product.setUser(user);
+        productRepository.update(product);
+        return updateImage(product,productRequest);
+    }
+
+    private ProductDto updateImage(Product product, ProductDto productRequest) {
+       if(productRequest.getImageList().size() !=0){
+           productImageService.deleteImages(product.getProductId());
+          return  saveImage(product,productRequest);
+       }
+        else{
+           productImageService.deleteImages(product.getProductId());
+           return getProductResponse(product);
+       }
+    }
 }
