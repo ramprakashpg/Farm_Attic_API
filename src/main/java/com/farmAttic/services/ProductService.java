@@ -1,11 +1,13 @@
 package com.farmAttic.services;
 
 import com.farmAttic.Dtos.ProductDto;
+import com.farmAttic.Dtos.ProductRequest;
 import com.farmAttic.models.Product;
 import com.farmAttic.models.ProductImage;
 import com.farmAttic.models.User;
 import com.farmAttic.repositories.ProductRepository;
 import jakarta.inject.Singleton;
+import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 
 import java.util.ArrayList;
@@ -14,19 +16,15 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Singleton
+@AllArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
 
     private final ProductImageService productImageService;
     private final UserAuthService userAuthService;
+    private final CartService cartService;
     private static final ModelMapper modelMapper = new ModelMapper();
 
-
-    public ProductService(ProductRepository productRepository, ProductImageService productImageService, UserAuthService userAuthService) {
-        this.productRepository = productRepository;
-        this.productImageService = productImageService;
-        this.userAuthService = userAuthService;
-    }
 
     public ProductDto saveProductInformation(ProductDto productRequest) {
         Product product = new Product();
@@ -55,6 +53,16 @@ public class ProductService {
             productsResponse.add(response);
         });
         return productsResponse;
+    }
+    public void saveToCart(ProductRequest productRequest, String loggedInUserEmail) {
+        Product product = productRepository.findById(productRequest.getProductId()).orElse(new Product());
+        User currentUser = userAuthService.getCurrentUser(loggedInUserEmail);
+
+        if(product.getProductId() != null){
+            cartService.addToCart(product,currentUser, productRequest);
+        }
+
+
     }
 
     private ProductDto saveImage(Product product, ProductDto productRequest) {

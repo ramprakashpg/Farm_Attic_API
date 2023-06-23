@@ -1,6 +1,7 @@
 package com.farmAttic.controllers;
 
 import com.farmAttic.Dtos.ProductDto;
+import com.farmAttic.Dtos.ProductRequest;
 import com.farmAttic.services.ProductService;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.http.HttpResponse;
@@ -36,7 +37,7 @@ public class ProductController {
     public HttpResponse<ProductDto> saveProduct( @Valid @Body ProductDto productRequest, Authentication authentication){
         LOGGER.info("{} : Save Product",authentication.getName());
         ProductDto productResponse= productService.saveProductInformation(productRequest);
-        return HttpResponse.ok(productResponse);
+        return HttpResponse.created(productResponse);
     }
 
     @Get(produces = MediaType.APPLICATION_JSON)
@@ -53,6 +54,14 @@ public class ProductController {
         LOGGER.info("Get Products for User id:{} - {}",userId ,authentication.getName());
         List<ProductDto> productsList = productService.getUserProducts(userId);
         return HttpResponse.ok(productsList);
+    }
+    @Post(value = "/{productId}/cart", produces = MediaType.APPLICATION_JSON)
+    @Secured(SecurityRule.IS_AUTHENTICATED)
+    public HttpResponse<ProductRequest> addProductToCart(Authentication authentication, @Valid @Body ProductRequest productRequest){
+        String loggedInUser = authentication.getName();
+        productService.saveToCart(productRequest, loggedInUser);
+        return HttpResponse.created(productRequest);
+
     }
 
     @Put(value="/{productId}",produces = MediaType.APPLICATION_JSON)

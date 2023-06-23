@@ -1,8 +1,10 @@
 package com.farmAttic.service;
 
 import com.farmAttic.models.Cart;
+import com.farmAttic.models.CartDetails;
 import com.farmAttic.models.User;
 import com.farmAttic.repositories.CartRepository;
+import com.farmAttic.services.CartDetailService;
 import com.farmAttic.services.CartService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,11 +18,13 @@ import static org.mockito.Mockito.*;
 public class CartServiceTest {
     private CartRepository cartRepository;
     private CartService cartService;
+    private CartDetailService cartDetailService;
 
     @BeforeEach
     void beforeEach(){
         cartRepository = Mockito.mock(CartRepository.class);
-        cartService = new CartService(cartRepository);
+        cartDetailService = mock(CartDetailService.class);
+        cartService = new CartService(cartRepository,cartDetailService);
     }
 
     @Test
