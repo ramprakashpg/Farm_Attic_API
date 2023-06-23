@@ -32,12 +32,12 @@ class UserAuthServiceTest {
 
     @Test
     void shouldSaveLoggedInUser() {
-        String email = "dummy@thoughtworks.com";
+        String email = "dummy@gmail.com";
         Map<String, Object> authMap = new HashMap<>();
         authMap.put("sub", email);
 
         User currentUser = new User();
-        currentUser.setEmail("dummy@thoughtworks.com");
+        currentUser.setEmail("dummy@gmail.com");
         currentUser.setFirstName("Dummy");
         currentUser.setLastName("Name");
 

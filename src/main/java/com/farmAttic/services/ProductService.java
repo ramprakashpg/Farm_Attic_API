@@ -54,12 +54,13 @@ public class ProductService {
         });
         return productsResponse;
     }
+
     public void saveToCart(ProductRequest productRequest, String loggedInUserEmail) {
         Product product = productRepository.findById(productRequest.getProductId()).orElse(new Product());
         User currentUser = userAuthService.getCurrentUser(loggedInUserEmail);
 
-        if(product.getProductId() != null){
-            cartService.addToCart(product,currentUser, productRequest);
+        if (product.getProductId() != null) {
+            cartService.addToCart(product, currentUser, productRequest);
         }
 
 
