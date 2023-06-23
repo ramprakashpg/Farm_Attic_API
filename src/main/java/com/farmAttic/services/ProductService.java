@@ -37,8 +37,8 @@ public class ProductService {
         product.setProductDescription(productRequest.getProductDescription());
         product.setPrice(productRequest.getPrice());
         product.setQuantity(productRequest.getQuantity());
-        Product product1 = productRepository.save(product);
-        return saveImage(product1, productRequest);
+        productRepository.save(product);
+        return saveImage(product, productRequest);
     }
 
     public List<ProductDto> getUserProducts(UUID userId) {
