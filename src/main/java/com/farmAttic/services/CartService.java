@@ -35,13 +35,13 @@ public class CartService {
         return cartRepository.findByUserId(loggedInUser.getUserId()).orElse(new Cart());
     }
 
-    public void addToCart(Product product, User user, ProductRequest productRequest){
+    public ProductRequest addToCart(Product product, User user, ProductRequest productRequest){
         CartDto cartDto = new CartDto();
         Cart userCart = getUserCart(user);
         cartDto.setCart(userCart);
         cartDto.setProduct(product);
         cartDto.setQuantity(productRequest.getQuantity());
-        cartDetailService.addToCart(cartDto);
+        return cartDetailService.addToCart(cartDto);
     }
 
 }

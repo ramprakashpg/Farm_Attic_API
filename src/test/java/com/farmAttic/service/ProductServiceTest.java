@@ -116,7 +116,7 @@ public class ProductServiceTest {
 
         when(productRepository.findById(any(UUID.class))).thenReturn(Optional.ofNullable(product));
         when(userAuthService.getCurrentUser("dummy@gmail.com")).thenReturn(user);
-        doNothing().when(cartService).addToCart(any(Product.class),any(User.class),any(ProductRequest.class));
+        when(cartService.addToCart(any(Product.class),any(User.class),any(ProductRequest.class))).thenReturn(productRequest1);
 
         productService.saveToCart(productRequest1,"dummy@gmail.com");
 

@@ -16,4 +16,5 @@ import java.util.UUID;
 public class ProductRequest {
     private UUID productId;
     private Integer quantity;
+    private Integer price;
 }

@@ -50,6 +50,7 @@ public class CartDetailsServiceTest {
         Product product = Product.builder().productId(UUID.randomUUID()).productName(productRequest.getProductName()).productDescription(productRequest.getProductDescription()).quantity(productRequest.getQuantity()).price(productRequest.getPrice()).user(currentUser).build();
 
         cartDetailsId.setProduct(product);
+        userCart.setUserInfo(currentUser);
         cartDetailsId.setCart(userCart);
 
         cartDetails.setCartDetailsId(cartDetailsId);

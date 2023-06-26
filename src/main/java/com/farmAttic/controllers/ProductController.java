@@ -2,6 +2,7 @@ package com.farmAttic.controllers;
 
 import com.farmAttic.Dtos.ProductDto;
 import com.farmAttic.Dtos.ProductRequest;
+import com.farmAttic.models.Product;
 import com.farmAttic.services.ProductService;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.http.HttpResponse;
@@ -9,6 +10,7 @@ import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.*;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.authentication.Authentication;
+import io.micronaut.security.authentication.AuthenticationExceptionHandler;
 import io.micronaut.security.rules.SecurityRule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,9 +60,10 @@ public class ProductController {
     @Post(value = "/{productId}/cart", produces = MediaType.APPLICATION_JSON)
     @Secured(SecurityRule.IS_AUTHENTICATED)
     public HttpResponse<ProductRequest> addProductToCart(Authentication authentication, @Valid @Body ProductRequest productRequest){
+        LOGGER.info("product :{} added to cart by {}",productRequest.getProductId(),authentication.getName());
         String loggedInUser = authentication.getName();
-        productService.saveToCart(productRequest, loggedInUser);
-        return HttpResponse.created(productRequest);
+        ProductRequest productResponse=productService.saveToCart(productRequest, loggedInUser);
+        return HttpResponse.created(productResponse);
 
     }
 
@@ -71,4 +74,10 @@ public class ProductController {
         ProductDto productResponse = productService.updateProduct(productId,productRequest);
         return HttpResponse.ok(productResponse);
     }
+
+//    @Post(value="/order",produces = MediaType.APPLICATION_JSON)
+//    @Secured(SecurityRule.IS_AUTHENTICATED)
+//    public HttpResponse<ProductRequest> placeOrder(Authentication authentication){
+//
+//    }
 }

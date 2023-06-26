@@ -55,15 +55,13 @@ public class ProductService {
         return productsResponse;
     }
 
-    public void saveToCart(ProductRequest productRequest, String loggedInUserEmail) {
+    public ProductRequest saveToCart(ProductRequest productRequest, String loggedInUserEmail) {
         Product product = productRepository.findById(productRequest.getProductId()).orElse(new Product());
         User currentUser = userAuthService.getCurrentUser(loggedInUserEmail);
-
         if (product.getProductId() != null) {
-            cartService.addToCart(product, currentUser, productRequest);
+            return cartService.addToCart(product, currentUser, productRequest);
         }
-
-
+          return new ProductRequest();
     }
 
     private ProductDto saveImage(Product product, ProductDto productRequest) {
