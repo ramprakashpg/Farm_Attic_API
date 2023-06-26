@@ -1,6 +1,7 @@
 package com.farmAttic.controllers;
 
 import com.farmAttic.Dtos.ProductDto;
+import com.farmAttic.Dtos.ProductRequest;
 import com.farmAttic.models.User;
 import com.farmAttic.services.ProductService;
 import com.farmAttic.services.UserAuthService;
@@ -16,8 +17,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 public class ProductControllerTest {
 
@@ -28,22 +29,22 @@ public class ProductControllerTest {
     private final UserAuthService userAuthService=mock(UserAuthService.class);
     ProductController productController = new ProductController(productService);
 
-    ProductDto productRequest = new ProductDto();
+    ProductDto product = new ProductDto();
 
     User user =new User();
 
     @BeforeEach
     public void beforeEach() {
         List<byte[]> productImageDtoList = new ArrayList<>();
-        productRequest.setProductDescription("description");
-        productRequest.setProductName("productName");
-        productRequest.setPrice(13);
-        productRequest.setQuantity(13);
+        product.setProductDescription("description");
+        product.setProductName("productName");
+        product.setPrice(13);
+        product.setQuantity(13);
         UUID uuid = UUID.randomUUID();
-        productRequest.setUserId(uuid);
+        product.setUserId(uuid);
         byte[] byteArray = new byte[36];
         productImageDtoList.add(byteArray);
-        productRequest.setImageList(productImageDtoList);
+        product.setImageList(productImageDtoList);
 
         user.setUserId(uuid);
         user.setEmail("smssaddepalli@gmail.com");
@@ -55,50 +56,66 @@ public class ProductControllerTest {
     void shouldSaveProduct() {
 
 
-        when(productService.saveProductInformation(productRequest)).thenReturn(productRequest);
+        when(productService.saveProductInformation(product)).thenReturn(product);
 
-        HttpResponse<ProductDto> actualResponse = productController.saveProduct(productRequest, authentication);
+        HttpResponse<ProductDto> actualResponse = productController.saveProduct(product, authentication);
 
-        Assertions.assertEquals(HttpResponse.created(actualResponse).getStatus(), actualResponse.getStatus());
+        assertEquals(HttpResponse.created(actualResponse).getStatus(), actualResponse.getStatus());
 
     }
 
     @Test
     void shouldGetAllProducts() {
         List<ProductDto> productsResponseList = new ArrayList<>();
-        productsResponseList.add(productRequest);
+        productsResponseList.add(product);
 
         when(productService.getProducts()).thenReturn(productsResponseList);
 
         HttpResponse<List<ProductDto>> actualResponse = productController.getAllProducts(authentication);
 
-        Assertions.assertEquals(HttpResponse.ok().getStatus(), actualResponse.getStatus());
-        Assertions.assertEquals(1, Objects.requireNonNull(actualResponse.body()).size());
+        assertEquals(HttpResponse.ok().getStatus(), actualResponse.getStatus());
+        assertEquals(1, Objects.requireNonNull(actualResponse.body()).size());
     }
 
     @Test
     void shouldGetAllProductsOfUser() {
         List<ProductDto> productsResponseList = new ArrayList<>();
-        productsResponseList.add(productRequest);
+        productsResponseList.add(product);
         UUID uuid = UUID.randomUUID();
 
         when(productService.getProducts()).thenReturn(productsResponseList);
 
         HttpResponse<List<ProductDto>> actualResponse = productController.getUserProducts(uuid,authentication);
 
-        Assertions.assertEquals(HttpResponse.ok().getStatus(), actualResponse.getStatus());
-        Assertions.assertEquals(0, Objects.requireNonNull(actualResponse.body()).size());
+        assertEquals(HttpResponse.ok().getStatus(), actualResponse.getStatus());
+        assertEquals(0, Objects.requireNonNull(actualResponse.body()).size());
     }
 
     @Test
     void shouldUpdateProduct() {
         UUID uuid = UUID.randomUUID();
 
-        when(productService.updateProduct(uuid,productRequest)).thenReturn(productRequest);
-        when(userAuthService.getUser(productRequest.getUserId())).thenReturn(user);
+        when(productService.updateProduct(uuid, product)).thenReturn(product);
+        when(userAuthService.getUser(product.getUserId())).thenReturn(user);
 
-        HttpResponse<ProductDto> actualResponse = productController.updateProduct(uuid,productRequest,authentication);
+        HttpResponse<ProductDto> actualResponse = productController.updateProduct(uuid, product,authentication);
 
-        Assertions.assertEquals(HttpResponse.ok().getStatus(),actualResponse.getStatus());
+        assertEquals(HttpResponse.ok().getStatus(),actualResponse.getStatus());
+    }
+
+    @Test
+    void shouldAddProductToCart() {
+        String loggedInUser = "123@gmail.com";
+        ProductRequest productRequest = new ProductRequest();
+        productRequest.setProductId(UUID.randomUUID());
+        productRequest.setProductId(UUID.randomUUID());
+
+        doNothing().when(productService).saveToCart(productRequest,loggedInUser);
+        when(authentication.getName()).thenReturn(loggedInUser);
+        HttpResponse<ProductRequest> actualResponse = productController.addProductToCart(authentication, productRequest);
+
+        verify(productService).saveToCart(productRequest, loggedInUser);
+        assertEquals(HttpResponse.created(productRequest).getStatus(), actualResponse.getStatus());
+
     }
 }

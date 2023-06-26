@@ -1,11 +1,15 @@
 package com.farmAttic.integration;
 
+import com.farmAttic.Dtos.ProductRequest;
+import com.farmAttic.models.Cart;
 import com.farmAttic.models.Product;
 import com.farmAttic.models.User;
+import com.farmAttic.repositories.CartRepository;
 import com.farmAttic.repositories.ProductImageRepository;
 import com.farmAttic.repositories.ProductRepository;
 import com.farmAttic.repositories.UserRepository;
 import io.micronaut.http.HttpRequest;
+import io.micronaut.http.HttpResponse;
 import io.micronaut.http.client.HttpClient;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
@@ -17,6 +21,9 @@ import org.junit.jupiter.api.Test;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @MicronautTest
 class ProductControllerTest {
@@ -37,6 +44,8 @@ class ProductControllerTest {
 
     @Inject
     EntityManager entityManager;
+    @Inject
+    CartRepository cartRepository;
 
 
     @BeforeEach
@@ -162,6 +171,32 @@ class ProductControllerTest {
         String expectedResponse="{\"productId\":\""+product.getProductId()+"\",\"userId\":\""+user.getUserId()+"\",\"productName\":\"priya Addepalli\",\"productDescription\":\"sahiti\",\"quantity\":122,\"price\":225,\"imageList\":[\"/9j/4AAQSkZJ\"]}";
 
         Assertions.assertEquals(expectedResponse, actualResponse);
+        assertEquals(expectedResponse, actualResponse);
 
+    }
+
+    @Test
+    void shouldAddProductToCart() {
+        User user = new User();
+        user.setEmail("dummy@test.com");
+        user.setFirstName("Sahiti");
+        user.setLastName("Priya");
+
+        Cart cart = new Cart();
+        cart.setUserInfo(user);
+
+        Product product = Product.builder().productName("product").productDescription("description").quantity(12).price(12).user(user).build();
+
+        userRepository.save(user);
+        cartRepository.save(cart);
+        productRepository.save(product);
+
+        ProductRequest productRequest = new ProductRequest();
+        productRequest.setProductId(product.getProductId());
+        productRequest.setQuantity(2);
+        String expectedResponse = "{\"productId\":\""+product.getProductId()+"\",\"quantity\":2}";
+        String actualResponse = client.toBlocking().retrieve(HttpRequest.POST("v1/product/"+product.getProductId()+"/cart",productRequest).bearerAuth("anything"), String.class);
+
+        assertEquals(actualResponse, expectedResponse);
     }
 }
