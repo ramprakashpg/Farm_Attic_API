@@ -22,13 +22,13 @@ public class CartDetailService {
         if (userCartDetails.getCartDetailsId() == null) {
             CartDetails cartDetails = modelMapper.map(cart, CartDetails.class);
             cartDetails.setCartDetailsId(cartDetailsId);
-            cartDetails.setPrice(cart.getQuantity() * cart.getProduct().getPrice());
+            cartDetails.setPrice(cart.getQuantity() * cart.getProduct().getPricePerUnit());
             cartDetailsRepository.save(cartDetails);
             userCartDetails=cartDetails;
         } else {
             Integer existingQty = userCartDetails.getQuantity();
             userCartDetails.setQuantity(existingQty + cart.getQuantity());
-            userCartDetails.setPrice((existingQty + cart.getQuantity()) * cart.getProduct().getPrice());
+            userCartDetails.setPrice((existingQty + cart.getQuantity()) * cart.getProduct().getPricePerUnit());
             cartDetailsRepository.update(userCartDetails);
         }
         return getProductResponse(userCartDetails);
