@@ -1,0 +1,59 @@
+micronaut:
+  http:
+    client:
+      read-timeout: 1m
+
+  application:
+    name: farm_attic_api
+  server:
+    port: 8000
+    cors:
+      enabled: true
+  security:
+    enabled: true
+    token:
+      jwt:
+        enabled: true
+        claims-validators:
+          issuer: '${OIDC_ISSUER:`https://dev-72143172.okta.com/oauth2/default`}'
+        signatures:
+          jwks:
+            okta:
+              url: '${OIDC_ISSUER:`https://dev-72143172.okta.com/oauth2/default`}/v1/keys'
+
+netty:
+  default:
+    allocator:
+      max-order: 3
+
+
+datasources:
+  default:
+    url: jdbc:postgresql://localhost:5431/postgresql?sslmode=disable
+    driver-class-name: org.postgresql.Driver
+    username: ${USER}
+    password: ${USER}
+    dialect : POSTGRES
+    schema: test_schema_v2
+    auto-commit: true
+
+
+
+flyway:
+  datasources:
+    default:
+      enabled: true
+      locations: 'classpath:db.migration'
+      clean-schema: true
+      create-schemas: true
+
+jpa:
+  default:
+    entity-scan:
+      packages: 'com.farmAttic.models'
+    properties:
+      hibernate:
+        default-schema : new_schema
+        hbm2ddl:
+          auto: validate
+        show_sql: false
