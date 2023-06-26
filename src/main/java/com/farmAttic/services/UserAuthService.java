@@ -11,6 +11,8 @@ import org.modelmapper.ModelMapper;
 
 import java.util.UUID;
 
+import static com.farmAttic.AuthConstant.EMAIL;
+
 @Singleton
 @AllArgsConstructor
 public class UserAuthService {
@@ -20,13 +22,17 @@ public class UserAuthService {
     private static final ModelMapper modelMapper = new ModelMapper();
 
     public void login(String authorizationHeader, Authentication authentication) {
-        String email = authentication.getAttributes().get("sub").toString();
-        User currentUser = userRepository.findByEmail(email).orElse(new User());
+        String email = authentication.getAttributes().get(EMAIL).toString();
+        User currentUser = getCurrentUser(email);
         if(currentUser.getUserId() == null) {
             currentUser = saveUserInfo(authorizationHeader);
         }
         assignCart(currentUser);
 
+    }
+
+    public User getCurrentUser(String email) {
+        return userRepository.findByEmail(email).orElse(new User());
     }
 
     public User getUser(UUID userId) {

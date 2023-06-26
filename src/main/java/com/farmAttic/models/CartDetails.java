@@ -25,5 +25,5 @@ public class CartDetails implements Serializable {
     private CartDetailsId cartDetailsId;
 
     @Column(name="quantity",nullable = false)
-    private int quantity;
+    private Integer quantity;
 }

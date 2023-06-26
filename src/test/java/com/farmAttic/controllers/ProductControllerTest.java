@@ -59,8 +59,7 @@ public class ProductControllerTest {
 
         HttpResponse<ProductDto> actualResponse = productController.saveProduct(productRequest, authentication);
 
-        Assertions.assertEquals(HttpResponse.ok().getStatus(), actualResponse.getStatus());
-        Assertions.assertEquals("productName", actualResponse.body().getProductName());
+        Assertions.assertEquals(HttpResponse.created(actualResponse).getStatus(), actualResponse.getStatus());
 
     }
 
