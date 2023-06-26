@@ -10,9 +10,13 @@ create table tbm_product(
     product_id UUID DEFAULT uuid_in(md5(random()::text || random()::text)::cstring),
     product_name varchar(200),
     product_description varchar(200),
-    price int,
+    price_per_unit int,
     quantity int,
+    unit varchar(200),
     user_id UUID references tbm_user(user_id),
-    CONSTRAINT tbm_product_pk PRIMARY KEY (product_id)
+    CONSTRAINT tbm_product_pk PRIMARY KEY (product_id),
+    expiry_date TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,7 +27,12 @@ public class ProductDto {
     @NotNull
     private Integer quantity;
     @NotNull
-    private Integer price;
+    private Integer pricePerUnit;
     @NotNull
     private List<byte []> imageList;
+
+    @NotNull
+    private String unit;
+    @NotNull
+    private Date expiryDate;
 }

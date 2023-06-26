@@ -32,7 +32,7 @@ public class CartDetailsServiceTest {
         cartDetailService = new CartDetailService(cartDetailsRepository);
         productRequest.setProductDescription("description");
         productRequest.setProductName("productName");
-        productRequest.setPrice(13);
+        productRequest.setPricePerUnit(13);
         productRequest.setQuantity(13);
         productRequest.setUserId(UUID.randomUUID());
 
@@ -47,7 +47,7 @@ public class CartDetailsServiceTest {
     void shouldAddProductToCart() {
         CartDetails cartDetails = new CartDetails();
         CartDetailsId cartDetailsId = new CartDetailsId();
-        Product product = Product.builder().productId(UUID.randomUUID()).productName(productRequest.getProductName()).productDescription(productRequest.getProductDescription()).quantity(productRequest.getQuantity()).price(productRequest.getPrice()).user(currentUser).build();
+        Product product = Product.builder().productId(UUID.randomUUID()).productName(productRequest.getProductName()).productDescription(productRequest.getProductDescription()).quantity(productRequest.getQuantity()).pricePerUnit(productRequest.getPricePerUnit()).user(currentUser).build();
 
         cartDetailsId.setProduct(product);
         userCart.setUserInfo(currentUser);
@@ -68,7 +68,7 @@ public class CartDetailsServiceTest {
     void shouldUpdateCartWhenSameProductIsAdded() {
         CartDetails cartDetails = new CartDetails();
         CartDetailsId cartDetailsId = new CartDetailsId();
-        Product product = Product.builder().productId(UUID.randomUUID()).productName(productRequest.getProductName()).productDescription(productRequest.getProductDescription()).quantity(productRequest.getQuantity()).price(productRequest.getPrice()).user(currentUser).build();
+        Product product = Product.builder().productId(UUID.randomUUID()).productName(productRequest.getProductName()).productDescription(productRequest.getProductDescription()).quantity(productRequest.getQuantity()).pricePerUnit(productRequest.getPricePerUnit()).user(currentUser).build();
 
         cartDetailsId.setProduct(product);
         cartDetailsId.setCart(userCart);

@@ -7,7 +7,6 @@ import com.farmAttic.services.ProductService;
 import com.farmAttic.services.UserAuthService;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.security.authentication.Authentication;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -38,7 +37,7 @@ public class ProductControllerTest {
         List<byte[]> productImageDtoList = new ArrayList<>();
         product.setProductDescription("description");
         product.setProductName("productName");
-        product.setPrice(13);
+        product.setPricePerUnit(13);
         product.setQuantity(13);
         UUID uuid = UUID.randomUUID();
         product.setUserId(uuid);

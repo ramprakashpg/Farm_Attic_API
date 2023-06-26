@@ -27,13 +27,9 @@ public class ProductService {
 
 
     public ProductDto saveProductInformation(ProductDto productRequest) {
-        Product product = new Product();
         User user = userAuthService.getUser(productRequest.getUserId());
+        Product product = modelMapper.map(productRequest, Product.class);
         product.setUser(user);
-        product.setProductName(productRequest.getProductName());
-        product.setProductDescription(productRequest.getProductDescription());
-        product.setPrice(productRequest.getPrice());
-        product.setQuantity(productRequest.getQuantity());
         productRepository.save(product);
         return saveImage(product, productRequest);
     }
@@ -93,25 +89,25 @@ public class ProductService {
 
 
     public ProductDto updateProduct(UUID productId, ProductDto productRequest) {
-        Product product=productRepository.findById(productId).orElseThrow();
-        User user =userAuthService.getUser(productRequest.getUserId());
+        Product product = productRepository.findById(productId).orElseThrow();
+        User user = userAuthService.getUser(productRequest.getUserId());
         product.setProductName(productRequest.getProductName());
         product.setProductDescription(productRequest.getProductDescription());
-        product.setPrice(productRequest.getPrice());
+        product.setPricePerUnit(productRequest.getPricePerUnit());
         product.setQuantity(productRequest.getQuantity());
         product.setUser(user);
+        product.setExpiryDate(productRequest.getExpiryDate());
         productRepository.update(product);
-        return updateImage(product,productRequest);
+        return updateImage(product, productRequest);
     }
 
     private ProductDto updateImage(Product product, ProductDto productRequest) {
-       if(productRequest.getImageList().size() !=0){
-           productImageService.deleteImages(product.getProductId());
-          return  saveImage(product,productRequest);
-       }
-        else{
-           productImageService.deleteImages(product.getProductId());
-           return getProductResponse(product);
-       }
+        if (productRequest.getImageList().size() != 0) {
+            productImageService.deleteImages(product.getProductId());
+            return saveImage(product, productRequest);
+        } else {
+            productImageService.deleteImages(product.getProductId());
+            return getProductResponse(product);
+        }
     }
 }

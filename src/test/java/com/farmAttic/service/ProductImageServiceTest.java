@@ -37,7 +37,7 @@ class ProductImageServiceTest {
         List<byte[]> productImageDtoList = new ArrayList<>();
         productRequest.setProductDescription("description");
         productRequest.setProductName("productName");
-        productRequest.setPrice(13);
+        productRequest.setPricePerUnit(13);
         productRequest.setQuantity(13);
         productRequest.setUserId(uuid);
         byte[] byteArray = new byte[36];
@@ -49,7 +49,7 @@ class ProductImageServiceTest {
         user.setFirstName("Sahiti");
         user.setLastName("Priya");
 
-        product = Product.builder().productId(uuid).productName(productRequest.getProductName()).productDescription(productRequest.getProductDescription()).quantity(productRequest.getQuantity()).price(productRequest.getPrice()).user(user).build();
+        product = Product.builder().productId(uuid).productName(productRequest.getProductName()).productDescription(productRequest.getProductDescription()).quantity(productRequest.getQuantity()).pricePerUnit(productRequest.getPricePerUnit()).user(user).build();
 
         productImage.setProduct(product);
         productImage.setImageId(uuid);

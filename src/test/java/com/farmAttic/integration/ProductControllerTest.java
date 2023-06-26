@@ -9,7 +9,6 @@ import com.farmAttic.repositories.ProductImageRepository;
 import com.farmAttic.repositories.ProductRepository;
 import com.farmAttic.repositories.UserRepository;
 import io.micronaut.http.HttpRequest;
-import io.micronaut.http.HttpResponse;
 import io.micronaut.http.client.HttpClient;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
@@ -20,8 +19,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.persistence.EntityManager;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -67,7 +67,7 @@ class ProductControllerTest {
         user.setEmail("dummy@test.com");
         user.setFirstName("Sahiti");
         user.setLastName("Priya");
-        Product product = Product.builder().productName("product").productDescription("description").quantity(12).price(12).user(user).build();
+        Product product = Product.builder().productName("product").productDescription("description").quantity(12).pricePerUnit(12).user(user).build();
 
         userRepository.save(user);
         productRepository.save(product);
@@ -75,10 +75,10 @@ class ProductControllerTest {
         entityManager.clear();
         entityManager.close();
 
-        String expectedResponse = "[{\"productId\":\"" + product.getProductId() + "\",\"userId\":\"" + user.getUserId() + "\",\"productName\":\"product\",\"productDescription\":\"description\",\"quantity\":12,\"price\":12}]";
+        String expectedResponse = "[{\"productId\":\"" + product.getProductId() + "\",\"userId\":\"" + user.getUserId() + "\",\"productName\":\"product\",\"productDescription\":\"description\",\"quantity\":12,\"pricePerUnit\":12}]";
         String actualResponse = client.toBlocking().retrieve(HttpRequest.GET("v1/product").bearerAuth("anything"), String.class);
 
-        Assertions.assertEquals(expectedResponse, actualResponse);
+        assertEquals(expectedResponse, actualResponse);
 
     }
 
@@ -92,8 +92,8 @@ class ProductControllerTest {
         user.setEmail("dummy@test123.com");
         user.setFirstName("Sahiti");
         user.setLastName("Priya");
-        Product product = Product.builder().productName("product").productDescription("description").quantity(12).price(12).user(user).build();
-        Product product1 = Product.builder().productName("product").productDescription("description").quantity(12).price(12).user(user1).build();
+        Product product = Product.builder().productName("product").productDescription("description").quantity(12).pricePerUnit(12).user(user).build();
+        Product product1 = Product.builder().productName("product").productDescription("description").quantity(12).pricePerUnit(12).user(user1).build();
 
         userRepository.save(user);
         userRepository.save(user1);
@@ -103,10 +103,10 @@ class ProductControllerTest {
         entityManager.clear();
         entityManager.close();
 
-        String expectedResponse = "[{\"productId\":\"" + product.getProductId() + "\",\"userId\":\"" + user.getUserId() + "\",\"productName\":\"product\",\"productDescription\":\"description\",\"quantity\":12,\"price\":12}]";
-        String actualResponse = client.toBlocking().retrieve(HttpRequest.GET("v1/product"+"/"+user.getUserId()).bearerAuth("anything"), String.class);
+        String expectedResponse = "[{\"productId\":\"" + product.getProductId() + "\",\"userId\":\"" + user.getUserId() + "\",\"productName\":\"product\",\"productDescription\":\"description\",\"quantity\":12,\"pricePerUnit\":12}]";
+        String actualResponse = client.toBlocking().retrieve(HttpRequest.GET("v1/product" + "/" + user.getUserId()).bearerAuth("anything"), String.class);
 
-        Assertions.assertEquals(expectedResponse, actualResponse);
+        assertEquals(expectedResponse, actualResponse);
 
     }
 
@@ -122,21 +122,23 @@ class ProductControllerTest {
         entityManager.clear();
         entityManager.close();
 
-        String dataRequest="{\n" +
-                "    \"userId\":\""+user.getUserId()+"\",\n" +
+        String dataRequest = "{\n" +
+                "    \"userId\":\"" + user.getUserId() + "\",\n" +
                 "    \"productDescription\": \"sahiti\",\n" +
-                "    \"productName\": \"priya Addepalli\",\n" +
-                "    \"quantity\": 122,\n" +
-                "    \"price\":225,\n" +
-                "    \"imageList\": [[-1, -40, -1, -32, 0, 16, 74, 70, 73]]\n" +
+                "    \"productName\": \"connsadain\",\n" +
+                "    \"quantity\": 50,\n" +
+                "    \"pricePerUnit\":57,\n" +
+                "    \"unit\":\"kg\",\n" +
+                "    \"expiryDate\":1234,\n" +
+                "    \"imageList\": []\n" +
                 "}";
 
         String actualResponse = client.toBlocking().retrieve(HttpRequest.POST("v1/product", dataRequest)
                 .bearerAuth("anything"));
 
-        List<Product> product=productRepository.findAll();
+        List<Product> product = productRepository.findAll();
 
-        String expectedResponse="{\"productId\":\""+product.get(0).getProductId()+"\",\"userId\":\""+user.getUserId()+"\",\"productName\":\"priya Addepalli\",\"productDescription\":\"sahiti\",\"quantity\":122,\"price\":225,\"imageList\":[\"/9j/4AAQSkZJ\"]}";
+        String expectedResponse = "{\"productId\":\"" + product.get(0).getProductId() + "\",\"userId\":\"" + user.getUserId() + "\",\"productName\":\"connsadain\",\"productDescription\":\"sahiti\",\"quantity\":50,\"pricePerUnit\":57,\"unit\":\"kg\",\"expiryDate\":1234}";
 
         Assertions.assertEquals(expectedResponse, actualResponse);
 
@@ -148,7 +150,7 @@ class ProductControllerTest {
         user.setEmail("dummy@test.com");
         user.setFirstName("Sahiti");
         user.setLastName("Priya");
-        Product product = Product.builder().productName("product").productDescription("description").quantity(12).price(12).user(user).build();
+        Product product = Product.builder().productName("product").productDescription("description").quantity(12).pricePerUnit(12).expiryDate(new Date(2022, Calendar.FEBRUARY,1)).user(user).build();
 
         userRepository.save(user);
         productRepository.save(product);
@@ -156,21 +158,23 @@ class ProductControllerTest {
         entityManager.clear();
         entityManager.close();
 
-        String dataRequest="{\n" +
+        String dataRequest = "{\n" +
                 "    \"userId\":\""+user.getUserId()+"\",\n" +
                 "    \"productDescription\": \"sahiti\",\n" +
-                "    \"productName\": \"priya Addepalli\",\n" +
-                "    \"quantity\": 122,\n" +
-                "    \"price\":225,\n" +
-                "    \"imageList\": [[-1, -40, -1, -32, 0, 16, 74, 70, 73]]\n" +
+                "    \"productName\": \"connsadain\",\n" +
+                "    \"quantity\": 50,\n" +
+                "    \"pricePerUnit\":57,\n" +
+                "    \"unit\":\"kg\",\n" +
+                "    \"expiryDate\":1687782675939,\n" +
+                "    \"imageList\": []\n" +
                 "}";
 
-        String actualResponse = client.toBlocking().retrieve(HttpRequest.PUT("v1/product/"+product.getProductId(), dataRequest)
+        String actualResponse = client.toBlocking().retrieve(HttpRequest.PUT("v1/product/" + product.getProductId(), dataRequest)
                 .bearerAuth("anything"));
 
-        String expectedResponse="{\"productId\":\""+product.getProductId()+"\",\"userId\":\""+user.getUserId()+"\",\"productName\":\"priya Addepalli\",\"productDescription\":\"sahiti\",\"quantity\":122,\"price\":225,\"imageList\":[\"/9j/4AAQSkZJ\"]}";
+        String expectedResponse = "{\"productId\":\""+product.getProductId()+"\",\"userId\":\""+user.getUserId()+"\",\"productName\":\"connsadain\",\"productDescription\":\"sahiti\",\"quantity\":50,\"pricePerUnit\":57,\"expiryDate\":1687782675939}";
 
-        Assertions.assertEquals(expectedResponse, actualResponse);
+        assertEquals(expectedResponse, actualResponse);
         assertEquals(expectedResponse, actualResponse);
 
     }
@@ -185,7 +189,7 @@ class ProductControllerTest {
         Cart cart = new Cart();
         cart.setUserInfo(user);
 
-        Product product = Product.builder().productName("product").productDescription("description").quantity(12).price(12).user(user).build();
+        Product product = Product.builder().productName("product").productDescription("description").quantity(12).pricePerUnit(12).user(user).build();
 
         userRepository.save(user);
         cartRepository.save(cart);
@@ -194,8 +198,8 @@ class ProductControllerTest {
         ProductRequest productRequest = new ProductRequest();
         productRequest.setProductId(product.getProductId());
         productRequest.setQuantity(2);
-        String expectedResponse = "{\"productId\":\""+product.getProductId()+"\",\"quantity\":2}";
-        String actualResponse = client.toBlocking().retrieve(HttpRequest.POST("v1/product/"+product.getProductId()+"/cart",productRequest).bearerAuth("anything"), String.class);
+        String expectedResponse = "{\"productId\":\"" + product.getProductId() + "\",\"quantity\":2}";
+        String actualResponse = client.toBlocking().retrieve(HttpRequest.POST("v1/product/" + product.getProductId() + "/cart", productRequest).bearerAuth("anything"), String.class);
 
         assertEquals(actualResponse, expectedResponse);
     }

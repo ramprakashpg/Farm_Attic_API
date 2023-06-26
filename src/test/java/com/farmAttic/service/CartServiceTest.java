@@ -1,10 +1,8 @@
 package com.farmAttic.service;
 
 import com.farmAttic.Dtos.CartDto;
-import com.farmAttic.Dtos.ProductDto;
 import com.farmAttic.Dtos.ProductRequest;
 import com.farmAttic.models.Cart;
-import com.farmAttic.models.CartDetails;
 import com.farmAttic.models.Product;
 import com.farmAttic.models.User;
 import com.farmAttic.repositories.CartRepository;
@@ -59,7 +57,7 @@ public class CartServiceTest {
         loggedInUser.setEmail("dummy@gmail.com");
         loggedInUser.setFirstName("dummy");
         loggedInUser.setLastName("user");
-        Product product = Product.builder().productId(UUID.randomUUID()).productName("Hello").productDescription("").quantity(123).price(123).user(loggedInUser).build();
+        Product product = Product.builder().productId(UUID.randomUUID()).productName("Hello").productDescription("").quantity(123).pricePerUnit(123).user(loggedInUser).build();
         Cart userCart = new Cart();
         userCart.setUserInfo(loggedInUser);
 

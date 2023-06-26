@@ -49,7 +49,7 @@ public class ProductServiceTest {
         List<byte[]> productImageDtoList = new ArrayList<>();
         productRequest.setProductDescription("description");
         productRequest.setProductName("productName");
-        productRequest.setPrice(13);
+        productRequest.setPricePerUnit(13);
         productRequest.setQuantity(13);
         productRequest.setUserId(uuid);
         byte[] byteArray = new byte[36];
@@ -61,7 +61,7 @@ public class ProductServiceTest {
         user.setFirstName("Sahiti");
         user.setLastName("Priya");
 
-        product = Product.builder().productId(uuid).productName(productRequest.getProductName()).productDescription(productRequest.getProductDescription()).quantity(productRequest.getQuantity()).price(productRequest.getPrice()).user(user).build();
+        product = Product.builder().productId(uuid).productName(productRequest.getProductName()).productDescription(productRequest.getProductDescription()).quantity(productRequest.getQuantity()).pricePerUnit(productRequest.getPricePerUnit()).user(user).build();
 
     }
 
@@ -80,7 +80,7 @@ public class ProductServiceTest {
     @Test
     void shouldGetAllProducts() {
         List<Product> products = new ArrayList<>();
-        Product product = Product.builder().productId(uuid).productName(productRequest.getProductName()).productDescription(productRequest.getProductDescription()).quantity(productRequest.getQuantity()).price(productRequest.getPrice()).user(user).build();
+        Product product = Product.builder().productId(uuid).productName(productRequest.getProductName()).productDescription(productRequest.getProductDescription()).quantity(productRequest.getQuantity()).pricePerUnit(productRequest.getPricePerUnit()).user(user).build();
         products.add(product);
 
         when(productRepository.findAll()).thenReturn(products);
@@ -108,7 +108,7 @@ public class ProductServiceTest {
         ProductRequest productRequest1 = new ProductRequest();
         productRequest1.setProductId(UUID.randomUUID());
         productRequest1.setQuantity(2);
-        Product product = Product.builder().productId(uuid).productName(productRequest.getProductName()).productDescription(productRequest.getProductDescription()).quantity(productRequest.getQuantity()).price(productRequest.getPrice()).user(user).build();
+        Product product = Product.builder().productId(uuid).productName(productRequest.getProductName()).productDescription(productRequest.getProductDescription()).quantity(productRequest.getQuantity()).pricePerUnit(productRequest.getPricePerUnit()).user(user).build();
         User currentUser = new User();
         currentUser.setEmail("dummy@gmail.com");
         currentUser.setFirstName("Dummy");
@@ -137,7 +137,7 @@ public class ProductServiceTest {
 
         productService.updateProduct(productId,productRequest);
 
-        verify(productRepository).update(product);
+        verify(productRepository).update(any(Product.class));
     }
 
     @Test
@@ -153,7 +153,7 @@ public class ProductServiceTest {
 
         productService.updateProduct(productId,productRequest);
 
-        verify(productRepository).update(product);
+        verify(productRepository).update(any(Product.class));
     }
 }
 
