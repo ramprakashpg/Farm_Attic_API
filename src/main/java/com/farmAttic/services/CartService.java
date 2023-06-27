@@ -64,7 +64,7 @@ public class CartService {
     }
 
     public CartResponse updateCart(UUID cartId, UUID productId, Integer quantity) throws Throwable {
-        Cart cart = cartRepository.findById(cartId).orElse(new Cart());
+        Cart cart = getCartById(cartId);
         CartResponse cartResponse = new CartResponse();
         if(cart.getCartId() != null) {
             CartDetails cartDetails = cartDetailService.updateUserCart(cart, productId, quantity);
@@ -82,5 +82,15 @@ public class CartService {
             return addToCart(product, currentUser, productRequest);
         }
         return new ProductRequest();
+    }
+
+    private Cart getCartById(UUID cartId) {
+        return cartRepository.findById(cartId).orElse(new Cart());
+    }
+
+    public void deleteProductFromCart(UUID cartId, UUID productId) {
+        Cart cart = getCartById(cartId);
+        cartDetailService.deleteProductFromCart(cart, productId);
+        
     }
 }

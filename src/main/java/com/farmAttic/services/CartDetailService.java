@@ -59,16 +59,29 @@ public class CartDetailService {
         Product product = productService.getProduct(productId);
         cartDetailsId.setCart(cart);
         cartDetailsId.setProduct(product);
-        CartDetails cartDetails = cartDetailsRepository.findById(cartDetailsId).orElseThrow(new Supplier<Throwable>() {
-            @Override
-            public Throwable get() {
-                return new Exception("Product not found");
-            }
-        });
+        CartDetails cartDetails = getCartDetails(cartDetailsId);
         if(cartDetails.getCartDetailsId() != null){
             cartDetails.setQuantity(quantity);
             cartDetails = cartDetailsRepository.update(cartDetails);
         }
         return cartDetails;
+    }
+
+    private CartDetails getCartDetails(CartDetailsId cartDetailsId) throws Throwable {
+        return cartDetailsRepository.findById(cartDetailsId).orElseThrow(new Supplier<Throwable>() {
+            @Override
+            public Throwable get() {
+                return new Exception("Product not found");
+            }
+        });
+    }
+
+    public void deleteProductFromCart(Cart cart, UUID productId) throws Throwable {
+        Product product = productService.getProduct(productId);
+        CartDetailsId id = new CartDetailsId();
+        id.setCart(cart);
+        id.setProduct(product);
+        CartDetails cartDetails = getCartDetails(id);
+        cartDetailsRepository.delete(cartDetails);
     }
 }

@@ -55,5 +55,11 @@ public class CartController {
         ProductRequest productResponse = cartService.saveToCart(productRequest, loggedInUser);
         return HttpResponse.created(productResponse);
     }
+    @Delete(value = "/{cartId}/product/{productId}", produces = MediaType.APPLICATION_JSON)
+    @Secured(SecurityRule.IS_AUTHENTICATED)
+    public HttpResponse deleteProductFromCart(@PathVariable("cartId") UUID cartId, @PathVariable("productId") UUID productId, Authentication authentication){
+        cartService.deleteProductFromCart(cartId, productId);
+        return HttpResponse.ok();
+    }
 
 }
