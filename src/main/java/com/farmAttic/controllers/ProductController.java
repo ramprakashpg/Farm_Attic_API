@@ -75,9 +75,4 @@ public class ProductController {
         return HttpResponse.ok(productResponse);
     }
 
-//    @Post(value="/order",produces = MediaType.APPLICATION_JSON)
-//    @Secured(SecurityRule.IS_AUTHENTICATED)
-//    public HttpResponse<ProductRequest> placeOrder(Authentication authentication){
-//
-//    }
 }

@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -109,5 +110,9 @@ public class ProductService {
             productImageService.deleteImages(product.getProductId());
             return getProductResponse(product);
         }
+    }
+
+    public void clearProductQuantity(Date currentDate) {
+        productRepository.clearQuantity(currentDate);
     }
 }
