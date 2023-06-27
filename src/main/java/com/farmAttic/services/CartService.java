@@ -1,8 +1,6 @@
 package com.farmAttic.services;
 
-import com.farmAttic.Dtos.CartDto;
-import com.farmAttic.Dtos.ProductRequest;
-import com.farmAttic.Dtos.UserCartDto;
+import com.farmAttic.Dtos.*;
 import com.farmAttic.models.Cart;
 import com.farmAttic.models.CartDetails;
 import com.farmAttic.models.Product;
@@ -12,7 +10,8 @@ import jakarta.inject.Singleton;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 
-import java.util.List;
+
+import java.util.*;
 
 @Singleton
 @AllArgsConstructor
@@ -49,5 +48,32 @@ public class CartService {
 
     public List<CartDetails> getDetails(Cart cart) {
         return cartDetailService.getDetails(cart);
+    }
+    public UserCartResponse getUserCartDetails(UUID cartId) {
+        List<CartDetails> userCartDetails = cartDetailService.getUserCartDetails(cartId);
+        List<CartResponse> cartResponses = new ArrayList<>();
+        for (CartDetails cartDetail:userCartDetails) {
+            CartResponse cartResponse = new CartResponse();
+            cartResponse.setProduct(cartDetail.getCartDetailsId().getProduct());
+            cartResponse.setPrice(cartDetail.getPrice());
+            cartResponse.setQuantity(cartDetail.getQuantity());
+            cartResponses.add(cartResponse);
+        }
+        UserCartResponse userCartResponse = new UserCartResponse();
+        userCartResponse.setCart(userCartDetails.get(0).getCartDetailsId().getCart());
+        userCartResponse.setUserProduct(cartResponses);
+        return userCartResponse;
+    }
+
+    public CartResponse updateCart(UUID cartId, UUID productId, Integer quantity) throws Throwable {
+        Cart cart = cartRepository.findById(cartId).orElse(new Cart());
+        CartResponse cartResponse = new CartResponse();
+        if(cart.getCartId() != null) {
+            CartDetails cartDetails = cartDetailService.updateUserCart(cart, productId, quantity);
+            cartResponse.setProduct(cartDetails.getCartDetailsId().getProduct());
+            cartResponse.setQuantity(cartResponse.getQuantity());
+        }
+        return cartResponse;
+
     }
 }
