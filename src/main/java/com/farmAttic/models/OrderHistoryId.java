@@ -17,7 +17,7 @@ public class OrderHistoryId implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "order_id")
-    private OrderDetails order;
+    private Order order;
 
     @ManyToOne
     @JoinColumn(name = "product_id")

@@ -2,6 +2,7 @@ package com.farmAttic.services;
 
 import com.farmAttic.Dtos.UserDto;
 import com.farmAttic.client.UserInfoClient;
+import com.farmAttic.models.Cart;
 import com.farmAttic.models.User;
 import com.farmAttic.repositories.UserRepository;
 import io.micronaut.security.authentication.Authentication;
@@ -46,4 +47,5 @@ public class UserAuthService {
     private void assignCart(User userInfo) {
         cartService.generateCart(userInfo);
     }
+
 }

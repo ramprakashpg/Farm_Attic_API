@@ -2,12 +2,16 @@ package com.farmAttic.services;
 
 import com.farmAttic.Dtos.CartDto;
 import com.farmAttic.Dtos.ProductRequest;
+import com.farmAttic.models.Cart;
 import com.farmAttic.models.CartDetails;
 import com.farmAttic.models.CartDetailsId;
+import com.farmAttic.models.Product;
 import com.farmAttic.repositories.CartDetailsRepository;
 import jakarta.inject.Singleton;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+
+import java.util.List;
 
 @Singleton
 @AllArgsConstructor
@@ -40,5 +44,10 @@ public class CartDetailService {
         productResponse.setPrice(userCartDetails.getPrice());
         productResponse.setProductId(userCartDetails.getCartDetailsId().getProduct().getProductId());
         return productResponse;
+    }
+
+
+    public List<CartDetails> getDetails(Cart cart) {
+        return  cartDetailsRepository.getDetails(cart);
     }
 }

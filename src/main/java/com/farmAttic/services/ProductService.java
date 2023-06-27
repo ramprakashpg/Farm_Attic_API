@@ -2,6 +2,7 @@ package com.farmAttic.services;
 
 import com.farmAttic.Dtos.ProductDto;
 import com.farmAttic.Dtos.ProductRequest;
+import com.farmAttic.models.Cart;
 import com.farmAttic.models.Product;
 import com.farmAttic.models.ProductImage;
 import com.farmAttic.models.User;
@@ -115,4 +116,9 @@ public class ProductService {
     public void clearProductQuantity(Date currentDate) {
         productRepository.clearQuantity(currentDate);
     }
+
+    public User getUser(UUID userId) {
+        return userAuthService.getUser(userId);
+    }
+
 }

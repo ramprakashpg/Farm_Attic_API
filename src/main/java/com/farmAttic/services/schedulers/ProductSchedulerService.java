@@ -23,11 +23,11 @@ public class ProductSchedulerService {
         this.productService = productService;
     }
 
-    @Scheduled(fixedDelay = "10s")
+    @Scheduled(fixedDelay = "1d")
     public void clearExpiredProductQuantity(){
         Calendar calendar=Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_YEAR, 1);
-        LOGGER.info("Cleaning up the expired activity logs");
+        LOGGER.info("Cleaning up the expired product quantity");
         Date currentDate= calendar.getTime();
         productService.clearProductQuantity(currentDate);
     }

@@ -4,12 +4,15 @@ import com.farmAttic.Dtos.CartDto;
 import com.farmAttic.Dtos.ProductRequest;
 import com.farmAttic.Dtos.UserCartDto;
 import com.farmAttic.models.Cart;
+import com.farmAttic.models.CartDetails;
 import com.farmAttic.models.Product;
 import com.farmAttic.models.User;
 import com.farmAttic.repositories.CartRepository;
 import jakarta.inject.Singleton;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+
+import java.util.List;
 
 @Singleton
 @AllArgsConstructor
@@ -44,4 +47,7 @@ public class CartService {
         return cartDetailService.addToCart(cartDto);
     }
 
+    public List<CartDetails> getDetails(Cart cart) {
+        return cartDetailService.getDetails(cart);
+    }
 }

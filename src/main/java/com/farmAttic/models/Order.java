@@ -16,15 +16,15 @@ import java.util.UUID;
 @Introspected
 @Entity
 @Table(name="tbl_order_details")
-public class OrderDetails {
+public class Order {
     @Id
     @Column(name = "order_id", unique = true, nullable = false, length = 36)
     @GeneratedValue
     private UUID orderId;
 
     @ManyToOne
-    @JoinColumn(name="cart_id",referencedColumnName = "cart_id")
-    private Cart cart;
+    @JoinColumn(name="user_id",referencedColumnName = "user_id")
+    private User user;
 
     @Column(name = "status")
     private String status;

@@ -18,7 +18,7 @@ import java.util.Date;
 
 @Introspected
 @Entity
-@Table(name="tbl_order_history")
+@Table(name = "tbl_order_history")
 public class OrderHistory {
 
     @EmbeddedId
@@ -26,9 +26,12 @@ public class OrderHistory {
     @AttributeOverride(name = "product", column = @Column(name = "product_id"))
     private OrderHistoryId historyId;
 
-    @ManyToOne
-    @JoinColumn(name="user_id",referencedColumnName = "user_id")
-    private User user;
+
+    @Column(name = "quantity", nullable = false)
+    private Integer quantity;
+
+    @Column(name = "price", nullable = false)
+    private Integer price;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
@@ -39,7 +42,6 @@ public class OrderHistory {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at", nullable = false)
     private Date updatedAt;
-
 
 
 }
