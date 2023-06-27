@@ -102,19 +102,4 @@ public class ProductControllerTest {
         assertEquals(HttpResponse.ok().getStatus(),actualResponse.getStatus());
     }
 
-    @Test
-    void shouldAddProductToCart() {
-        String loggedInUser = "123@gmail.com";
-        ProductRequest productRequest = new ProductRequest();
-        productRequest.setProductId(UUID.randomUUID());
-        productRequest.setProductId(UUID.randomUUID());
-
-        doNothing().when(productService).saveToCart(productRequest,loggedInUser);
-        when(authentication.getName()).thenReturn(loggedInUser);
-        HttpResponse<ProductRequest> actualResponse = productController.addProductToCart(authentication, productRequest);
-
-        verify(productService).saveToCart(productRequest, loggedInUser);
-        assertEquals(HttpResponse.created(productRequest).getStatus(), actualResponse.getStatus());
-
-    }
 }

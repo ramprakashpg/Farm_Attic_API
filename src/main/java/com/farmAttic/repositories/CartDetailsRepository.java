@@ -16,4 +16,5 @@ public interface CartDetailsRepository extends CrudRepository<CartDetails, CartD
     @Executable
     @Query("select userCartDetail from CartDetails userCartDetail where userCartDetail.cartDetailsId.cart.cartId=:cartId")
     List<CartDetails> findByCartId(UUID cartId);
+
 }

@@ -17,6 +17,8 @@ import java.util.*;
 public class CartService {
     private CartRepository cartRepository;
     private CartDetailService cartDetailService;
+    private ProductService productService;
+    private UserAuthService userAuthService;
     private static final ModelMapper modelMapper = new ModelMapper();
 
 
@@ -67,9 +69,18 @@ public class CartService {
         if(cart.getCartId() != null) {
             CartDetails cartDetails = cartDetailService.updateUserCart(cart, productId, quantity);
             cartResponse.setProduct(cartDetails.getCartDetailsId().getProduct());
-            cartResponse.setQuantity(cartResponse.getQuantity());
+            cartResponse.setQuantity(cartDetails.getQuantity());
         }
         return cartResponse;
 
+    }
+    public ProductRequest saveToCart(ProductRequest productRequest, String loggedInUserEmail) {
+        Product product = productService.getProduct(productRequest.getProductId());
+        User currentUser = userAuthService.getCurrentUser(loggedInUserEmail);
+        generateCart(currentUser);
+        if (product.getProductId() != null) {
+            return addToCart(product, currentUser, productRequest);
+        }
+        return new ProductRequest();
     }
 }

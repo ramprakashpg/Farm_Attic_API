@@ -57,15 +57,6 @@ public class ProductController {
         List<ProductDto> productsList = productService.getUserProducts(userId);
         return HttpResponse.ok(productsList);
     }
-    @Post(value = "/{productId}/cart", produces = MediaType.APPLICATION_JSON)
-    @Secured(SecurityRule.IS_AUTHENTICATED)
-    public HttpResponse<ProductRequest> addProductToCart(Authentication authentication, @Valid @Body ProductRequest productRequest){
-        LOGGER.info("product :{} added to cart by {}",productRequest.getProductId(),authentication.getName());
-        String loggedInUser = authentication.getName();
-        ProductRequest productResponse=productService.saveToCart(productRequest, loggedInUser);
-        return HttpResponse.created(productResponse);
-
-    }
 
     @Put(value="/{productId}",produces = MediaType.APPLICATION_JSON)
     @Secured(SecurityRule.IS_AUTHENTICATED)

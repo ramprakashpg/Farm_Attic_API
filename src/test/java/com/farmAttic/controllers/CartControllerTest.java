@@ -2,6 +2,7 @@ package com.farmAttic.controllers;
 
 import com.farmAttic.Dtos.ProductRequest;
 import com.farmAttic.services.CartService;
+import com.farmAttic.services.UserAuthService;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.security.authentication.Authentication;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,21 @@ import static org.mockito.Mockito.*;
 public class CartControllerTest {
     private final CartService cartService = mock(CartService.class);
     private final Authentication authentication = Mockito.mock(Authentication.class);
-    CartController cartController = new CartController(cartService);
+    private final UserAuthService userAuthService=mock(UserAuthService.class);
+    CartController cartController = new CartController(cartService,userAuthService);
+    @Test
+    void shouldAddProductToCart() {
+        String loggedInUser = "123@gmail.com";
+        ProductRequest productRequest = new ProductRequest();
+        productRequest.setProductId(UUID.randomUUID());
+        productRequest.setProductId(UUID.randomUUID());
 
+        doNothing().when(cartService).saveToCart(productRequest,loggedInUser);
+        when(authentication.getName()).thenReturn(loggedInUser);
+        HttpResponse<ProductRequest> actualResponse = cartController.addProductToCart(authentication, productRequest);
+
+        verify(cartService).saveToCart(productRequest, loggedInUser);
+        assertEquals(HttpResponse.created(productRequest).getStatus(), actualResponse.getStatus());
+
+    }
 }

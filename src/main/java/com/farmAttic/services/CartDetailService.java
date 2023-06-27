@@ -20,7 +20,7 @@ import java.util.function.Supplier;
 public class CartDetailService {
 
     public CartDetailsRepository cartDetailsRepository;
-//    public ProductService productService;
+    public ProductService productService;
     private static final ModelMapper modelMapper = new ModelMapper();
 
     public ProductRequest addToCart(CartDto cart) {
@@ -55,20 +55,20 @@ public class CartDetailService {
     }
 
     public CartDetails updateUserCart(Cart cart, UUID productId, Integer quantity) throws Throwable {
-//        CartDetailsId cartDetailsId = new CartDetailsId();
-//        Product product = productService.getProduct(productId);
-//        cartDetailsId.setCart(cart);
-//        cartDetailsId.setProduct(product);
-//        CartDetails cartDetails = cartDetailsRepository.findById(cartDetailsId).orElseThrow(new Supplier<Throwable>() {
-//            @Override
-//            public Throwable get() {
-//                return new Exception("Product not found");
-//            }
-//        });
-//        if(cartDetails.getCartDetailsId() != null){
-//            cartDetails.setQuantity(quantity);
-//            cartDetailsRepository.update(cartDetails);
-//        }
-        return new CartDetails();
+        CartDetailsId cartDetailsId = new CartDetailsId();
+        Product product = productService.getProduct(productId);
+        cartDetailsId.setCart(cart);
+        cartDetailsId.setProduct(product);
+        CartDetails cartDetails = cartDetailsRepository.findById(cartDetailsId).orElseThrow(new Supplier<Throwable>() {
+            @Override
+            public Throwable get() {
+                return new Exception("Product not found");
+            }
+        });
+        if(cartDetails.getCartDetailsId() != null){
+            cartDetails.setQuantity(quantity);
+            cartDetails = cartDetailsRepository.update(cartDetails);
+        }
+        return cartDetails;
     }
 }
