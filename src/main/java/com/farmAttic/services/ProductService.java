@@ -8,6 +8,7 @@ import com.farmAttic.models.User;
 import com.farmAttic.repositories.ProductRepository;
 import jakarta.inject.Singleton;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 
 import java.util.ArrayList;
@@ -52,13 +53,18 @@ public class ProductService {
     }
 
     public ProductRequest saveToCart(ProductRequest productRequest, String loggedInUserEmail) {
-        Product product = productRepository.findById(productRequest.getProductId()).orElse(new Product());
+        Product product = getProduct(productRequest.getProductId());
         User currentUser = userAuthService.getCurrentUser(loggedInUserEmail);
         if (product.getProductId() != null) {
             return cartService.addToCart(product, currentUser, productRequest);
         }
           return new ProductRequest();
     }
+
+    public Product getProduct(UUID productId) {
+        return productRepository.findById(productId).orElse(new Product());
+    }
+
 
     private ProductDto saveImage(Product product, ProductDto productRequest) {
         for (byte[] productImageDto : productRequest.getImageList()) {
