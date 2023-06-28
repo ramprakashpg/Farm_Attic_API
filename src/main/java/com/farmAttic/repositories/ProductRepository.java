@@ -2,12 +2,10 @@ package com.farmAttic.repositories;
 
 import com.farmAttic.models.Product;
 import io.micronaut.context.annotation.Executable;
-import io.micronaut.context.annotation.Parameter;
 import io.micronaut.data.annotation.Query;
 import io.micronaut.data.annotation.Repository;
 import io.micronaut.data.repository.CrudRepository;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;

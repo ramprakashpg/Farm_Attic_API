@@ -1,9 +1,7 @@
 package com.farmAttic.controllers;
 
 import com.farmAttic.Dtos.ProductRequest;
-import com.farmAttic.Dtos.UserCartResponse;
 import com.farmAttic.services.CartService;
-import com.farmAttic.services.UserAuthService;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.security.authentication.Authentication;
 import org.junit.jupiter.api.Test;

@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+
 import static org.mockito.Mockito.*;
 
 class UserAuthServiceTest {

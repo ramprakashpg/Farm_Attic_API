@@ -1,7 +1,6 @@
 package com.farmAttic.Dtos;
 
 import com.farmAttic.models.Cart;
-import com.farmAttic.models.CartDetails;
 import com.farmAttic.models.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -2,18 +2,15 @@ package com.farmAttic.service;
 
 
 import com.farmAttic.Dtos.ProductDto;
-import com.farmAttic.Dtos.ProductRequest;
 import com.farmAttic.models.Product;
 import com.farmAttic.models.User;
 import com.farmAttic.repositories.ProductRepository;
-import com.farmAttic.services.CartService;
 import com.farmAttic.services.ProductImageService;
 import com.farmAttic.services.ProductService;
 import com.farmAttic.services.UserAuthService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,7 +1,6 @@
 package com.farmAttic.controllers;
 
 import com.farmAttic.Dtos.ProductDto;
-import com.farmAttic.Dtos.ProductRequest;
 import com.farmAttic.models.User;
 import com.farmAttic.services.ProductService;
 import com.farmAttic.services.UserAuthService;
@@ -17,7 +16,8 @@ import java.util.Objects;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class ProductControllerTest {
 

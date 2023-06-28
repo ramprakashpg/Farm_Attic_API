@@ -6,10 +6,10 @@ import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.filters.AuthenticationFetcher;
 import io.micronaut.security.token.TokenAuthenticationFetcher;
 import io.micronaut.security.token.reader.TokenResolver;
+import io.reactivex.rxjava3.core.Flowable;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.reactivestreams.Publisher;
-import io.reactivex.rxjava3.core.Flowable;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,15 +1,12 @@
 package com.farmAttic.services;
 
 import com.farmAttic.Dtos.ProductDto;
-import com.farmAttic.Dtos.ProductRequest;
-import com.farmAttic.models.Cart;
 import com.farmAttic.models.Product;
 import com.farmAttic.models.ProductImage;
 import com.farmAttic.models.User;
 import com.farmAttic.repositories.ProductRepository;
 import jakarta.inject.Singleton;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 
 import java.util.ArrayList;
