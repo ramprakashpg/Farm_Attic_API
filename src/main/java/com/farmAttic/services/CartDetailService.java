@@ -50,9 +50,6 @@ public class CartDetailService {
     }
 
 
-    public List<CartDetails> getDetails(Cart cart) {
-        return  cartDetailsRepository.getDetails(cart);
-    }
 
     public List<CartDetails> getUserCartDetails(UUID cart) {
         return cartDetailsRepository.findByCartId(cart);
@@ -88,5 +85,13 @@ public class CartDetailService {
         id.setProduct(product);
         CartDetails cartDetails = getCartDetails(id);
         cartDetailsRepository.delete(cartDetails);
+    }
+
+    public void clearCart(CartDetails cartDetail) {
+        cartDetailsRepository.deleteById(cartDetail.getCartDetailsId());
+    }
+
+    public List<CartDetails> getDetails(Cart cart) {
+        return cartDetailsRepository.findByCartId(cart.getCartId());
     }
 }

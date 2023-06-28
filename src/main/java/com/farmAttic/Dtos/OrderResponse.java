@@ -16,5 +16,6 @@ import java.util.UUID;
 public class OrderResponse {
     private UUID orderId;
     private String status;
+    private Integer totalPrice;
     private List<CartResponse> cartResponseList;
 }

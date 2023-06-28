@@ -6,7 +6,6 @@ import com.farmAttic.models.*;
 import com.farmAttic.repositories.OrderRepository;
 import jakarta.inject.Singleton;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -44,15 +43,19 @@ public class OrderService {
            OrderHistory orderHistory = getOrderHistory(order, cartDetail);
            orderHistoryService.save(orderHistory);
            updateProduct(orderHistory);
+           clearCart(cartDetail);
         });
-        return getResponse(cartDetailsList,order);
+        OrderResponse orderResponse=new OrderResponse();
+        orderResponse.setOrderId(order.getOrderId());
+        return orderResponse;
+    }
+
+    private void clearCart(CartDetails cartDetail) {
+        cartService.clearCart(cartDetail);
     }
 
     private void updateProduct(OrderHistory orderHistory) {
         Product product=productService.getProduct(orderHistory.getHistoryId().getProduct().getProductId());
-        System.out.println("product quantity"+orderHistory.getHistoryId().getProduct().getQuantity());
-        System.out.println("order quantity"+orderHistory.getQuantity());
-        System.out.println("remaining quantity"+(orderHistory.getHistoryId().getProduct().getQuantity()-orderHistory.getQuantity()));
         int quantity= orderHistory.getHistoryId().getProduct().getQuantity()-orderHistory.getQuantity();
         product.setQuantity(quantity);
         productService.updateProduct(product);
@@ -62,7 +65,6 @@ public class OrderService {
         OrderHistoryId orderHistoryId=new OrderHistoryId();
         orderHistoryId.setOrder(order);
         orderHistoryId.setProduct(cartDetail.getCartDetailsId().getProduct());
-        System.out.println(cartDetail.getCartDetailsId().getProduct().getQuantity());
         OrderHistory orderHistory=new OrderHistory();
         orderHistory.setHistoryId(orderHistoryId);
         orderHistory.setQuantity(cartDetail.getQuantity());
@@ -70,19 +72,34 @@ public class OrderService {
         return orderHistory;
     }
 
-    private OrderResponse getResponse(List<CartDetails> cartDetailsList, Order order) {
+    private OrderResponse getResponse(List<OrderHistory> orderHistoryList, Order order) {
         OrderResponse orderResponse=new OrderResponse();
         orderResponse.setOrderId(order.getOrderId());
         List<CartResponse> cartResponseList=new ArrayList<>();
-        cartDetailsList.forEach(cartDetail->{
+        int totalPrice = 0;
+        for(OrderHistory orderHistory:orderHistoryList){
             CartResponse cartResponse=new CartResponse();
-            cartResponse.setProduct(cartDetail.getCartDetailsId().getProduct());
-            cartResponse.setQuantity(cartDetail.getQuantity());
-            cartResponse.setPrice(cartDetail.getPrice());
+            cartResponse.setProduct(orderHistory.getHistoryId().getProduct());
+            cartResponse.setQuantity(orderHistory.getQuantity());
+            cartResponse.setPrice(orderHistory.getPrice());
+            totalPrice += cartResponse.getPrice();
             cartResponseList.add(cartResponse);
-        });
+        }
+        orderResponse.setTotalPrice(totalPrice);
         orderResponse.setStatus(order.getStatus());
         orderResponse.setCartResponseList(cartResponseList);
         return orderResponse;
     }
+
+    public List<OrderResponse> getOrderDetails(UUID userId) {
+        List<Order> orders=orderRepository.findByUser(userId);
+        List<OrderResponse> orderResponses=new ArrayList<>();
+        orders.forEach(order -> {
+            List<OrderHistory> orderHistoryList=orderHistoryService.getDetails(order);
+            OrderResponse orderResponse=getResponse(orderHistoryList,order);
+            orderResponses.add(orderResponse);
+        });
+        return orderResponses;
+    }
+
 }

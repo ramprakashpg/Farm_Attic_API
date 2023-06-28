@@ -48,10 +48,6 @@ public class CartService {
         return cartDetailService.addToCart(cartDto);
     }
 
-    public List<CartDetails> getDetails(Cart cart) {
-        return cartDetailService.getDetails(cart);
-    }
-
     public UserCartResponse getUserCartDetails(UUID userId) {
         User loggedInUser = userAuthService.getUser(userId);
         Cart cart = getUserCart(loggedInUser);
@@ -100,5 +96,13 @@ public class CartService {
         Cart cart = getCartById(cartId);
         cartDetailService.deleteProductFromCart(cart, productId);
 
+    }
+
+    public void clearCart(CartDetails cartDetail) {
+        cartDetailService.clearCart(cartDetail);
+    }
+
+    public List<CartDetails> getDetails(Cart cart) {
+       return cartDetailService.getDetails(cart);
     }
 }
