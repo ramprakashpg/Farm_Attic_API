@@ -31,28 +31,31 @@ public class CartDetailService {
             cartDetails.setCartDetailsId(cartDetailsId);
             cartDetails.setPrice(cart.getQuantity() * cart.getProduct().getPricePerUnit());
             cartDetailsRepository.save(cartDetails);
-            userCartDetails=cartDetails;
+            userCartDetails = cartDetails;
         } else {
             Integer existingQty = userCartDetails.getQuantity();
-            userCartDetails.setQuantity(existingQty + cart.getQuantity());
-            userCartDetails.setPrice((existingQty + cart.getQuantity()) * cart.getProduct().getPricePerUnit());
+            Integer actualQuantity = existingQty + cart.getQuantity();
+            getPriceAndQuantity(cart.getProduct(), userCartDetails, actualQuantity);
             cartDetailsRepository.update(userCartDetails);
         }
         return getProductResponse(userCartDetails);
     }
 
+    private void getPriceAndQuantity(Product product, CartDetails userCartDetails, Integer quantity) {
+        userCartDetails.setQuantity(quantity);
+        userCartDetails.setPrice(quantity * product.getPricePerUnit());
+    }
+
     private ProductRequest getProductResponse(CartDetails userCartDetails) {
-        ProductRequest productResponse =new ProductRequest();
+        ProductRequest productResponse = new ProductRequest();
         productResponse.setQuantity(userCartDetails.getQuantity());
         productResponse.setPrice(userCartDetails.getPrice());
         productResponse.setProductId(userCartDetails.getCartDetailsId().getProduct().getProductId());
         return productResponse;
     }
 
-
-
-    public List<CartDetails> getUserCartDetails(UUID cart) {
-        return cartDetailsRepository.findByCartId(cart);
+    public List<CartDetails> getUserCartDetails(UUID cartId) {
+        return cartDetailsRepository.findByCartId(cartId);
 
     }
 
@@ -62,8 +65,8 @@ public class CartDetailService {
         cartDetailsId.setCart(cart);
         cartDetailsId.setProduct(product);
         CartDetails cartDetails = getCartDetails(cartDetailsId);
-        if(cartDetails.getCartDetailsId() != null){
-            cartDetails.setQuantity(quantity);
+        if (cartDetails.getCartDetailsId() != null) {
+            getPriceAndQuantity(product, cartDetails, quantity);
             cartDetails = cartDetailsRepository.update(cartDetails);
         }
         return cartDetails;

@@ -6,10 +6,13 @@ import com.farmAttic.models.*;
 import com.farmAttic.repositories.CartDetailsRepository;
 import com.farmAttic.services.CartDetailService;
 import com.farmAttic.services.ProductService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -84,5 +87,26 @@ public class CartDetailsServiceTest {
         cartDetailService.addToCart(cartDto);
 
         verify(cartDetailsRepository).update(any(CartDetails.class));
+    }
+
+    @Test
+    void shouldGetUserCartDetails() {
+        CartDetails cartDetails = new CartDetails();
+        CartDetailsId cartDetailsId = new CartDetailsId();
+        Product product = Product.builder().productId(UUID.randomUUID()).productName(productRequest.getProductName()).productDescription(productRequest.getProductDescription()).quantity(productRequest.getQuantity()).pricePerUnit(productRequest.getPricePerUnit()).user(currentUser).build();
+
+        cartDetailsId.setProduct(product);
+        userCart.setCartId(UUID.randomUUID());
+        cartDetailsId.setCart(userCart);
+
+        cartDetails.setCartDetailsId(cartDetailsId);
+        cartDetails.setQuantity(1);
+
+        when(cartDetailsRepository.findByCartId(any(UUID.class))).thenReturn(Collections.singletonList(cartDetails));
+
+        List<CartDetails> expectedResponse = cartDetailService.getUserCartDetails(cartDetailsId.getCart().getCartId());
+        verify(cartDetailsRepository).findByCartId(any(UUID.class));
+
+        Assertions.assertEquals(1, expectedResponse.size());
     }
 }

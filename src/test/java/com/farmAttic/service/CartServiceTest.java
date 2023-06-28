@@ -1,24 +1,18 @@
 package com.farmAttic.service;
 
-import com.farmAttic.Dtos.CartDto;
-import com.farmAttic.Dtos.ProductDto;
-import com.farmAttic.Dtos.ProductRequest;
-import com.farmAttic.models.Cart;
-import com.farmAttic.models.Product;
-import com.farmAttic.models.User;
+import com.farmAttic.Dtos.*;
+import com.farmAttic.models.*;
 import com.farmAttic.repositories.CartRepository;
 import com.farmAttic.services.CartDetailService;
 import com.farmAttic.services.CartService;
 import com.farmAttic.services.ProductService;
 import com.farmAttic.services.UserAuthService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static org.mockito.Mockito.*;
 
@@ -102,13 +96,9 @@ public class CartServiceTest {
         productRequest1.setProductId(UUID.randomUUID());
         productRequest1.setQuantity(2);
         Product product = Product.builder().productId(uuid).productName(productRequest.getProductName()).productDescription(productRequest.getProductDescription()).quantity(productRequest.getQuantity()).pricePerUnit(productRequest.getPricePerUnit()).user(user).build();
-        User currentUser = new User();
-        currentUser.setEmail("dummy@test.com");
-        currentUser.setFirstName("Dummy");
-        currentUser.setLastName("Name");
 
         Cart userCart = new Cart();
-        userCart.setUserInfo(currentUser);
+        userCart.setUserInfo(user);
 
         when(productService.getProduct(any(UUID.class))).thenReturn(product);
         when(userAuthService.getCurrentUser(any(String.class))).thenReturn(user);
@@ -119,5 +109,69 @@ public class CartServiceTest {
         verify(cartRepository).save(any(Cart.class));
 
 
+    }
+
+    @Test
+    void shouldGetUserCartDetails() {
+        Cart userCart = new Cart();
+        userCart.setUserInfo(user);
+
+        CartDetails cartDetails = new CartDetails();
+        CartDetailsId cartDetailsId = new CartDetailsId();
+        Product product = Product.builder().productId(UUID.randomUUID()).productName(productRequest.getProductName()).productDescription(productRequest.getProductDescription()).quantity(productRequest.getQuantity()).pricePerUnit(productRequest.getPricePerUnit()).user(user).build();
+
+        cartDetailsId.setProduct(product);
+        userCart.setCartId(UUID.randomUUID());
+        cartDetailsId.setCart(userCart);
+
+        cartDetails.setCartDetailsId(cartDetailsId);
+        cartDetails.setQuantity(1);
+
+        when(userAuthService.getUser(any(UUID.class))).thenReturn(user);
+        when(cartRepository.findByUserId(any(UUID.class))).thenReturn(Optional.of(userCart));
+        when(cartDetailService.getUserCartDetails(any(UUID.class))).thenReturn(Collections.singletonList(cartDetails));
+
+        UserCartResponse cartResponse = cartService.getUserCartDetails(user.getUserId());
+        Assertions.assertEquals(cartResponse.getUserProduct().size(),1);
+
+    }
+
+    @Test
+    void shouldUpdateCart() throws Throwable {
+        Cart userCart = new Cart();
+        userCart.setUserInfo(user);
+
+        CartDetails cartDetails = new CartDetails();
+        CartDetailsId cartDetailsId = new CartDetailsId();
+        Product product = Product.builder().productId(UUID.randomUUID()).productName(productRequest.getProductName()).productDescription(productRequest.getProductDescription()).quantity(productRequest.getQuantity()).pricePerUnit(productRequest.getPricePerUnit()).user(user).expiryDate(new Date()).pricePerUnit(40).build();
+
+        cartDetailsId.setProduct(product);
+        userCart.setCartId(UUID.randomUUID());
+        cartDetailsId.setCart(userCart);
+
+        cartDetails.setCartDetailsId(cartDetailsId);
+        cartDetails.setQuantity(1);
+        cartDetails.setPrice(80);
+
+        when(cartRepository.findById(any(UUID.class))).thenReturn(Optional.of(userCart));
+        when(cartDetailService.updateUserCart(any(Cart.class), any(UUID.class), any(Integer.class))).thenReturn(cartDetails);
+
+        CartResponse actualResponse = cartService.updateCart(cartDetailsId.getCart().getCartId(), product.getProductId(), 2);
+        CartResponse expectedResponse = new CartResponse(product, 2, 80);
+        Assertions.assertEquals(expectedResponse.getPrice(), actualResponse.getPrice());
+    }
+
+    @Test
+    void shouldDeleteProductFromCart() throws Throwable {
+        Cart userCart = new Cart();
+        userCart.setUserInfo(user);
+        Product product = Product.builder().productId(UUID.randomUUID()).productName(productRequest.getProductName()).productDescription(productRequest.getProductDescription()).quantity(productRequest.getQuantity()).pricePerUnit(productRequest.getPricePerUnit()).user(user).expiryDate(new Date()).pricePerUnit(40).build();
+
+
+        when(cartRepository.findById(any(UUID.class))).thenReturn(Optional.of(userCart));
+        doNothing().when(cartDetailService).deleteProductFromCart(any(Cart.class), any(UUID.class));
+
+        cartService.deleteProductFromCart(userCart.getCartId(), product.getProductId());
+        verify(cartDetailService).deleteProductFromCart(any(Cart.class), any(UUID.class));
     }
 }
