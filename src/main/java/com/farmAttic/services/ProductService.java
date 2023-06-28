@@ -105,8 +105,12 @@ public class ProductService {
         product.setQuantity(productRequest.getQuantity());
         product.setUser(user);
         product.setExpiryDate(productRequest.getExpiryDate());
-        productRepository.update(product);
+        updateProduct(product);
         return updateImage(product, productRequest);
+    }
+
+    public void updateProduct(Product product) {
+        productRepository.update(product);
     }
 
     private ProductDto updateImage(Product product, ProductDto productRequest) {
