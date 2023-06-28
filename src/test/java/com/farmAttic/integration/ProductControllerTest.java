@@ -178,29 +178,4 @@ class ProductControllerTest {
         assertEquals(expectedResponse, actualResponse);
 
     }
-
-    @Test
-    void shouldAddProductToCart() {
-        User user = new User();
-        user.setEmail("dummy@test.com");
-        user.setFirstName("Sahiti");
-        user.setLastName("Priya");
-
-        Cart cart = new Cart();
-        cart.setUserInfo(user);
-
-        Product product = Product.builder().productName("product").productDescription("description").quantity(12).pricePerUnit(12).user(user).build();
-
-        userRepository.save(user);
-        cartRepository.save(cart);
-        productRepository.save(product);
-
-        ProductRequest productRequest = new ProductRequest();
-        productRequest.setProductId(product.getProductId());
-        productRequest.setQuantity(2);
-        String expectedResponse = "{\"productId\":\"" + product.getProductId() + "\",\"quantity\":2}";
-        String actualResponse = client.toBlocking().retrieve(HttpRequest.POST("v1/product/" + product.getProductId() + "/cart", productRequest).bearerAuth("anything"), String.class);
-
-        assertEquals(actualResponse, expectedResponse);
-    }
 }

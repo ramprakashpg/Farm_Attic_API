@@ -5,6 +5,7 @@ import com.farmAttic.Dtos.ProductDto;
 import com.farmAttic.models.*;
 import com.farmAttic.repositories.CartDetailsRepository;
 import com.farmAttic.services.CartDetailService;
+import com.farmAttic.services.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -13,13 +14,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class CartDetailsServiceTest {
     CartDetailsRepository cartDetailsRepository;
     CartDetailService cartDetailService;
     ProductDto productRequest = new ProductDto();
+    private final ProductService productService=mock(ProductService.class);
     User currentUser = new User();
     Cart userCart = new Cart();
 
@@ -29,7 +30,7 @@ public class CartDetailsServiceTest {
     @BeforeEach
     void beforeEach(){
         cartDetailsRepository = Mockito.mock(CartDetailsRepository.class);
-        cartDetailService = new CartDetailService(cartDetailsRepository);
+        cartDetailService = new CartDetailService(cartDetailsRepository, productService);
         productRequest.setProductDescription("description");
         productRequest.setProductName("productName");
         productRequest.setPricePerUnit(13);

@@ -25,7 +25,6 @@ public class ProductService {
 
     private final ProductImageService productImageService;
     private final UserAuthService userAuthService;
-    private final CartService cartService;
     private static final ModelMapper modelMapper = new ModelMapper();
 
 
@@ -52,15 +51,6 @@ public class ProductService {
             productsResponse.add(response);
         });
         return productsResponse;
-    }
-
-    public ProductRequest saveToCart(ProductRequest productRequest, String loggedInUserEmail) {
-        Product product = getProduct(productRequest.getProductId());
-        User currentUser = userAuthService.getCurrentUser(loggedInUserEmail);
-        if (product.getProductId() != null) {
-            return cartService.addToCart(product, currentUser, productRequest);
-        }
-          return new ProductRequest();
     }
 
     public Product getProduct(UUID productId) {

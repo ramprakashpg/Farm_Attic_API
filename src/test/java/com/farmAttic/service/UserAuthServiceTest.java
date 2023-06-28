@@ -27,7 +27,7 @@ class UserAuthServiceTest {
     @BeforeEach
     void beforeEach(){
         userRepository = mock(UserRepository.class);
-        userAuthService = new UserAuthService(userRepository, userInfoClient, cartService);
+        userAuthService = new UserAuthService(userRepository, userInfoClient);
     }
 
     @Test

@@ -35,7 +35,6 @@ public class ProductServiceTest {
     UUID uuid = UUID.randomUUID();
 
     User user = new User();
-    CartService cartService = mock(CartService.class);
 
     Product product=new Product();
 
@@ -44,7 +43,7 @@ public class ProductServiceTest {
     void beforeEach() {
 
         productRepository = mock(ProductRepository.class);
-        productService = new ProductService(productRepository, productImageService, userAuthService, cartService);
+        productService = new ProductService(productRepository, productImageService, userAuthService);
 
         List<byte[]> productImageDtoList = new ArrayList<>();
         productRequest.setProductDescription("description");
@@ -100,28 +99,6 @@ public class ProductServiceTest {
         List<ProductDto> productResponse = productService.getUserProducts(product.getUser().getUserId());
 
         Assertions.assertEquals(1, productResponse.size());
-
-    }
-
-    @Test
-    void addProductToCart() {
-        ProductRequest productRequest1 = new ProductRequest();
-        productRequest1.setProductId(UUID.randomUUID());
-        productRequest1.setQuantity(2);
-        Product product = Product.builder().productId(uuid).productName(productRequest.getProductName()).productDescription(productRequest.getProductDescription()).quantity(productRequest.getQuantity()).pricePerUnit(productRequest.getPricePerUnit()).user(user).build();
-        User currentUser = new User();
-        currentUser.setEmail("dummy@gmail.com");
-        currentUser.setFirstName("Dummy");
-        currentUser.setLastName("Name");
-
-        when(productRepository.findById(any(UUID.class))).thenReturn(Optional.ofNullable(product));
-        when(userAuthService.getCurrentUser("dummy@gmail.com")).thenReturn(user);
-        when(cartService.addToCart(any(Product.class),any(User.class),any(ProductRequest.class))).thenReturn(productRequest1);
-
-        productService.saveToCart(productRequest1,"dummy@gmail.com");
-
-        verify(cartService).addToCart(any(Product.class),any(User.class),any(ProductRequest.class));
-
 
     }
 
