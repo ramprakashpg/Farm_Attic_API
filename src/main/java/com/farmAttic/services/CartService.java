@@ -73,6 +73,7 @@ public class CartService {
             CartDetails cartDetails = cartDetailService.updateUserCart(cart, productId, quantity);
             cartResponse.setProduct(cartDetails.getCartDetailsId().getProduct());
             cartResponse.setQuantity(cartDetails.getQuantity());
+            cartResponse.setPrice(cartDetails.getPrice());
         }
         return cartResponse;
 
@@ -82,10 +83,12 @@ public class CartService {
         Product product = productService.getProduct(productRequest.getProductId());
         User currentUser = userAuthService.getCurrentUser(loggedInUserEmail);
         generateCart(currentUser);
+
         if (product.getProductId() != null) {
             return addToCart(product, currentUser, productRequest);
+        }else{
+            throw new NoSuchElementException("Product not found");
         }
-        return new ProductRequest();
     }
 
     private Cart getCartById(UUID cartId) {

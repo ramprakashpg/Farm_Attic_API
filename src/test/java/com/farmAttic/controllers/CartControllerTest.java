@@ -34,4 +34,9 @@ public class CartControllerTest {
         assertEquals(HttpResponse.created(productRequest).getStatus(), actualResponse.getStatus());
 
     }
+
+    @Test
+    void shouldGetUserCartDetails() {
+
+    }
 }

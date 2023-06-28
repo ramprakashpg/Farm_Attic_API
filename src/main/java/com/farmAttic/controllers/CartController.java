@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Controller("v1/cart")
@@ -49,8 +50,12 @@ public class CartController {
     public HttpResponse<ProductRequest> addProductToCart(Authentication authentication, @Valid @Body ProductRequest productRequest) {
         LOGGER.info("product :{} added to cart by {}", productRequest.getProductId(), authentication.getName());
         String loggedInUser = authentication.getName();
-        ProductRequest productResponse = cartService.saveToCart(productRequest, loggedInUser);
-        return HttpResponse.created(productResponse);
+        try {
+            ProductRequest productResponse = cartService.saveToCart(productRequest, loggedInUser);
+            return HttpResponse.created(productResponse);
+        }catch(NoSuchElementException e){
+            return HttpResponse.badRequest(new ProductRequest());
+        }
     }
     @Delete(value = "/{cartId}/product/{productId}", produces = MediaType.APPLICATION_JSON)
     @Secured(SecurityRule.IS_AUTHENTICATED)
