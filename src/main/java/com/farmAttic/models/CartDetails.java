@@ -1,10 +1,7 @@
 package com.farmAttic.models;
 
 import io.micronaut.core.annotation.Introspected;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -16,7 +13,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Getter
 @Setter
-
+@Builder
 @Entity
 @Introspected
 @Table(name="tbl_cart_details")

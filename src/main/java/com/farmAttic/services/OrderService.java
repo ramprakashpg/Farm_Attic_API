@@ -36,19 +36,37 @@ public class OrderService {
         return placeOrderHistory(order);
     }
 
-    private OrderResponse placeOrderHistory(Order order) {
-        Cart cart=cartService.getUserCart(order.getUser());
-        List<CartDetails> cartDetailsList=cartService.getDetails(cart);
-       cartDetailsList.forEach(cartDetail->{
-           OrderHistory orderHistory = getOrderHistory(order, cartDetail);
-           orderHistoryService.save(orderHistory);
-           updateProduct(orderHistory);
-           clearCart(cartDetail);
+
+    public List<OrderResponse> getOrderDetails(UUID userId) {
+        List<Order> orders=orderRepository.findByUser(userId);
+        List<OrderResponse> orderResponses=new ArrayList<>();
+        orders.forEach(order -> {
+            List<OrderHistory> orderHistoryList=orderHistoryService.getDetails(order);
+            OrderResponse orderResponse=getResponse(orderHistoryList,order);
+            orderResponses.add(orderResponse);
         });
+        return orderResponses;
+    }
+
+    private OrderResponse getResponse(List<OrderHistory> orderHistoryList, Order order) {
         OrderResponse orderResponse=new OrderResponse();
         orderResponse.setOrderId(order.getOrderId());
+        List<CartResponse> cartResponseList=new ArrayList<>();
+        int totalPrice = 0;
+        for(OrderHistory orderHistory:orderHistoryList){
+            CartResponse cartResponse=new CartResponse();
+            cartResponse.setProduct(orderHistory.getHistoryId().getProduct());
+            cartResponse.setQuantity(orderHistory.getQuantity());
+            cartResponse.setPrice(orderHistory.getPrice());
+            totalPrice += cartResponse.getPrice();
+            cartResponseList.add(cartResponse);
+        }
+        orderResponse.setTotalPrice(totalPrice);
+        orderResponse.setStatus(order.getStatus());
+        orderResponse.setCartResponseList(cartResponseList);
         return orderResponse;
     }
+
 
     private void clearCart(CartDetails cartDetail) {
         cartService.clearCart(cartDetail);
@@ -72,34 +90,17 @@ public class OrderService {
         return orderHistory;
     }
 
-    private OrderResponse getResponse(List<OrderHistory> orderHistoryList, Order order) {
+    private OrderResponse placeOrderHistory(Order order) {
+        Cart cart=cartService.getUserCart(order.getUser());
+        List<CartDetails> cartDetailsList=cartService.getDetails(cart);
+        cartDetailsList.forEach(cartDetail->{
+            OrderHistory orderHistory = getOrderHistory(order, cartDetail);
+            orderHistoryService.save(orderHistory);
+            updateProduct(orderHistory);
+            clearCart(cartDetail);
+        });
         OrderResponse orderResponse=new OrderResponse();
         orderResponse.setOrderId(order.getOrderId());
-        List<CartResponse> cartResponseList=new ArrayList<>();
-        int totalPrice = 0;
-        for(OrderHistory orderHistory:orderHistoryList){
-            CartResponse cartResponse=new CartResponse();
-            cartResponse.setProduct(orderHistory.getHistoryId().getProduct());
-            cartResponse.setQuantity(orderHistory.getQuantity());
-            cartResponse.setPrice(orderHistory.getPrice());
-            totalPrice += cartResponse.getPrice();
-            cartResponseList.add(cartResponse);
-        }
-        orderResponse.setTotalPrice(totalPrice);
-        orderResponse.setStatus(order.getStatus());
-        orderResponse.setCartResponseList(cartResponseList);
         return orderResponse;
     }
-
-    public List<OrderResponse> getOrderDetails(UUID userId) {
-        List<Order> orders=orderRepository.findByUser(userId);
-        List<OrderResponse> orderResponses=new ArrayList<>();
-        orders.forEach(order -> {
-            List<OrderHistory> orderHistoryList=orderHistoryService.getDetails(order);
-            OrderResponse orderResponse=getResponse(orderHistoryList,order);
-            orderResponses.add(orderResponse);
-        });
-        return orderResponses;
-    }
-
 }

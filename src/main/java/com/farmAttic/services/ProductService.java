@@ -54,6 +54,30 @@ public class ProductService {
         return productRepository.findById(productId).orElse(new Product());
     }
 
+    public ProductDto updateProduct(UUID productId, ProductDto productRequest) {
+        Product product = productRepository.findById(productId).orElseThrow();
+        User user = userAuthService.getUser(productRequest.getUserId());
+        product.setProductName(productRequest.getProductName());
+        product.setProductDescription(productRequest.getProductDescription());
+        product.setPricePerUnit(productRequest.getPricePerUnit());
+        product.setQuantity(productRequest.getQuantity());
+        product.setUser(user);
+        product.setExpiryDate(productRequest.getExpiryDate());
+        updateProduct(product);
+        return updateImage(product, productRequest);
+    }
+
+    public void updateProduct(Product product) {
+        productRepository.update(product);
+    }
+    public void clearProductQuantity(Date currentDate) {
+        productRepository.clearQuantity(currentDate);
+    }
+
+    public User getUser(UUID userId) {
+        return userAuthService.getUser(userId);
+    }
+
 
     private ProductDto saveImage(Product product, ProductDto productRequest) {
         for (byte[] productImageDto : productRequest.getImageList()) {
@@ -83,22 +107,7 @@ public class ProductService {
     }
 
 
-    public ProductDto updateProduct(UUID productId, ProductDto productRequest) {
-        Product product = productRepository.findById(productId).orElseThrow();
-        User user = userAuthService.getUser(productRequest.getUserId());
-        product.setProductName(productRequest.getProductName());
-        product.setProductDescription(productRequest.getProductDescription());
-        product.setPricePerUnit(productRequest.getPricePerUnit());
-        product.setQuantity(productRequest.getQuantity());
-        product.setUser(user);
-        product.setExpiryDate(productRequest.getExpiryDate());
-        updateProduct(product);
-        return updateImage(product, productRequest);
-    }
 
-    public void updateProduct(Product product) {
-        productRepository.update(product);
-    }
 
     private ProductDto updateImage(Product product, ProductDto productRequest) {
         if (productRequest.getImageList().size() != 0) {
@@ -110,12 +119,6 @@ public class ProductService {
         }
     }
 
-    public void clearProductQuantity(Date currentDate) {
-        productRepository.clearQuantity(currentDate);
-    }
 
-    public User getUser(UUID userId) {
-        return userAuthService.getUser(userId);
-    }
 
 }
