@@ -10,6 +10,10 @@ import jakarta.inject.Singleton;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.UUID;
 
 import java.util.*;
 
@@ -84,7 +88,7 @@ public class CartService {
         User currentUser = userAuthService.getCurrentUser(loggedInUserEmail);
         generateCart(currentUser);
 
-        if (product.getProductId() != null) {
+        if (product.getProductId() != null && productRequest.getQuantity() <= product.getQuantity()) {
             return addToCart(product, currentUser, productRequest);
         }else{
             throw new NoSuchElementException("Product not found");

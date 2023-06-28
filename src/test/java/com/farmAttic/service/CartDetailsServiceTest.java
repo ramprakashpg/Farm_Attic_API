@@ -5,7 +5,6 @@ import com.farmAttic.Dtos.ProductDto;
 import com.farmAttic.models.*;
 import com.farmAttic.repositories.CartDetailsRepository;
 import com.farmAttic.services.CartDetailService;
-import com.farmAttic.services.CartService;
 import com.farmAttic.services.ProductService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

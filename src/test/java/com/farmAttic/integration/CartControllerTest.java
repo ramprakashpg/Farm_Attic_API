@@ -76,4 +76,8 @@ class CartControllerTest {
 
         assertEquals(actualResponse, expectedResponse);
     }
+
+    @Test
+    void shouldGetUserCartDetails() {
+    }
 }

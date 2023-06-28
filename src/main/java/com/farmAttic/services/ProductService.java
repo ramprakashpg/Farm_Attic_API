@@ -9,7 +9,6 @@ import com.farmAttic.models.User;
 import com.farmAttic.repositories.ProductRepository;
 import jakarta.inject.Singleton;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 
 import java.util.ArrayList;
