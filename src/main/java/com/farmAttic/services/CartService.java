@@ -22,9 +22,9 @@ public class CartService {
     private static final ModelMapper modelMapper = new ModelMapper();
 
 
-    public void generateCart(User loggedInUser){
+    public void generateCart(User loggedInUser) {
         Cart userCart = getUserCart(loggedInUser);
-        if(userCart.getCartId() == null) {
+        if (userCart.getCartId() == null) {
             UserCartDto cart = new UserCartDto();
             cart.setUserInfo(loggedInUser);
 
@@ -38,7 +38,7 @@ public class CartService {
         return cartRepository.findByUserId(loggedInUser.getUserId()).orElse(new Cart());
     }
 
-    public ProductRequest addToCart(Product product, User user, ProductRequest productRequest){
+    public ProductRequest addToCart(Product product, User user, ProductRequest productRequest) {
         CartDto cartDto = new CartDto();
         Cart userCart = getUserCart(user);
         cartDto.setCart(userCart);
@@ -47,10 +47,12 @@ public class CartService {
         return cartDetailService.addToCart(cartDto);
     }
 
-    public UserCartResponse getUserCartDetails(UUID cartId) {
-        List<CartDetails> userCartDetails = cartDetailService.getUserCartDetails(cartId);
+    public UserCartResponse getUserCartDetails(UUID userId) {
+        User loggedInUser = userAuthService.getUser(userId);
+        Cart cart = getUserCart(loggedInUser);
+        List<CartDetails> userCartDetails = cartDetailService.getUserCartDetails(cart.getCartId());
         List<CartResponse> cartResponses = new ArrayList<>();
-        for (CartDetails cartDetail:userCartDetails) {
+        for (CartDetails cartDetail : userCartDetails) {
             CartResponse cartResponse = new CartResponse();
             cartResponse.setProduct(cartDetail.getCartDetailsId().getProduct());
             cartResponse.setPrice(cartDetail.getPrice());
@@ -66,7 +68,7 @@ public class CartService {
     public CartResponse updateCart(UUID cartId, UUID productId, Integer quantity) throws Throwable {
         Cart cart = getCartById(cartId);
         CartResponse cartResponse = new CartResponse();
-        if(cart.getCartId() != null) {
+        if (cart.getCartId() != null) {
             CartDetails cartDetails = cartDetailService.updateUserCart(cart, productId, quantity);
             cartResponse.setProduct(cartDetails.getCartDetailsId().getProduct());
             cartResponse.setQuantity(cartDetails.getQuantity());
@@ -74,6 +76,7 @@ public class CartService {
         return cartResponse;
 
     }
+
     public ProductRequest saveToCart(ProductRequest productRequest, String loggedInUserEmail) {
         Product product = productService.getProduct(productRequest.getProductId());
         User currentUser = userAuthService.getCurrentUser(loggedInUserEmail);
@@ -88,9 +91,9 @@ public class CartService {
         return cartRepository.findById(cartId).orElse(new Cart());
     }
 
-    public void deleteProductFromCart(UUID cartId, UUID productId) {
+    public void deleteProductFromCart(UUID cartId, UUID productId) throws Throwable {
         Cart cart = getCartById(cartId);
         cartDetailService.deleteProductFromCart(cart, productId);
-        
+
     }
 }

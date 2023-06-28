@@ -3,9 +3,7 @@ package com.farmAttic.controllers;
 import com.farmAttic.Dtos.CartResponse;
 import com.farmAttic.Dtos.ProductRequest;
 import com.farmAttic.Dtos.UserCartResponse;
-import com.farmAttic.models.User;
 import com.farmAttic.services.CartService;
-import com.farmAttic.services.UserAuthService;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.HttpResponse;
@@ -28,14 +26,13 @@ import java.util.UUID;
 @AllArgsConstructor
 public class CartController {
     private CartService cartService;
-    private UserAuthService userAuthService;
     private static final Logger LOGGER = LoggerFactory.getLogger(CartController.class);
 
-    @Get(value = "/{cartId}", produces = MediaType.APPLICATION_JSON)
+    @Get(value = "user/{userId}", produces = MediaType.APPLICATION_JSON)
     @Secured(SecurityRule.IS_AUTHENTICATED)
-    public HttpResponse<UserCartResponse> addProductToCart(Authentication authentication, @PathVariable("cartId") UUID cartId) {
+    public HttpResponse<UserCartResponse> getUserCartDetails(Authentication authentication, @PathVariable("userId") UUID userId) {
         LOGGER.info("Get Cart info for user: {}", authentication.getName());
-        UserCartResponse cartResponse = cartService.getUserCartDetails(cartId);
+        UserCartResponse cartResponse = cartService.getUserCartDetails(userId);
         return HttpResponse.ok(cartResponse);
     }
 
@@ -57,7 +54,7 @@ public class CartController {
     }
     @Delete(value = "/{cartId}/product/{productId}", produces = MediaType.APPLICATION_JSON)
     @Secured(SecurityRule.IS_AUTHENTICATED)
-    public HttpResponse deleteProductFromCart(@PathVariable("cartId") UUID cartId, @PathVariable("productId") UUID productId, Authentication authentication){
+    public HttpResponse deleteProductFromCart(@PathVariable("cartId") UUID cartId, @PathVariable("productId") UUID productId, Authentication authentication) throws Throwable {
         cartService.deleteProductFromCart(cartId, productId);
         return HttpResponse.ok();
     }

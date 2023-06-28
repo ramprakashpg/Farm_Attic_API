@@ -103,17 +103,20 @@ public class CartServiceTest {
         productRequest1.setQuantity(2);
         Product product = Product.builder().productId(uuid).productName(productRequest.getProductName()).productDescription(productRequest.getProductDescription()).quantity(productRequest.getQuantity()).pricePerUnit(productRequest.getPricePerUnit()).user(user).build();
         User currentUser = new User();
-        currentUser.setEmail("dummy@gmail.com");
+        currentUser.setEmail("dummy@test.com");
         currentUser.setFirstName("Dummy");
         currentUser.setLastName("Name");
 
+        Cart userCart = new Cart();
+        userCart.setUserInfo(currentUser);
+
         when(productService.getProduct(any(UUID.class))).thenReturn(product);
-        when(userAuthService.getCurrentUser("dummy@gmail.com")).thenReturn(user);
-        when(cartService.addToCart(any(Product.class),any(User.class),any(ProductRequest.class))).thenReturn(productRequest1);
+        when(userAuthService.getCurrentUser(any(String.class))).thenReturn(user);
+        when(cartRepository.findByUserId(any(UUID.class))).thenReturn(Optional.of(userCart));
 
-        cartService.saveToCart(productRequest1,"dummy@gmail.com");
+        cartService.saveToCart(productRequest1,"dummy@test.com");
 
-        verify(cartService).addToCart(any(Product.class),any(User.class),any(ProductRequest.class));
+        verify(cartRepository).save(any(Cart.class));
 
 
     }
