@@ -1,6 +1,7 @@
 package com.farmAttic.controllers;
 
 import com.farmAttic.Dtos.CartResponse;
+import com.farmAttic.Dtos.CartUpdateRequest;
 import com.farmAttic.Dtos.ProductRequest;
 import com.farmAttic.Dtos.UserCartResponse;
 import com.farmAttic.services.CartService;
@@ -39,13 +40,13 @@ public class CartController {
 
     @Patch(value = "/{cartId}/product/{productId}", produces = MediaType.APPLICATION_JSON)
     @Secured(SecurityRule.IS_AUTHENTICATED)
-    public HttpResponse<CartResponse> updateCart(Authentication authentication, @PathVariable("cartId") UUID cartId, @PathVariable("productId") UUID productId, @Body @Nullable Integer quantity) throws Throwable {
+    public HttpResponse<CartResponse> updateCart(Authentication authentication, @PathVariable("cartId") UUID cartId, @PathVariable("productId") UUID productId, @Body CartUpdateRequest updateRequest) throws Throwable {
         LOGGER.info("Get Cart info for user: {}", authentication.getName());
-        CartResponse response = cartService.updateCart(cartId, productId, quantity);
+        CartResponse response = cartService.updateCart(cartId, productId, updateRequest.getQuantity());
         return HttpResponse.ok(response);
     }
 
-    @Post(value = "/{productId}", produces = MediaType.APPLICATION_JSON)
+    @Post(value = "/product", produces = MediaType.APPLICATION_JSON)
     @Secured(SecurityRule.IS_AUTHENTICATED)
     public HttpResponse<ProductRequest> addProductToCart(Authentication authentication, @Valid @Body ProductRequest productRequest) {
         LOGGER.info("product :{} added to cart by {}", productRequest.getProductId(), authentication.getName());

@@ -1,6 +1,7 @@
 package com.farmAttic.controllers;
 
 import com.farmAttic.Dtos.CartResponse;
+import com.farmAttic.Dtos.CartUpdateRequest;
 import com.farmAttic.Dtos.ProductRequest;
 import com.farmAttic.Dtos.UserCartResponse;
 import com.farmAttic.models.Cart;
@@ -74,8 +75,9 @@ public class CartControllerTest {
         CartResponse expectedResponse = new CartResponse(product, 2, 80);
 
         when(cartService.updateCart(cart.getCartId(),product.getProductId(),2)).thenReturn(expectedResponse);
+        CartUpdateRequest cartUpdateRequest = new CartUpdateRequest(2);
 
-        HttpResponse<CartResponse> actualResponse = cartController.updateCart(authentication, cart.getCartId(), product.getProductId(),2);
+        HttpResponse<CartResponse> actualResponse = cartController.updateCart(authentication, cart.getCartId(), product.getProductId(),cartUpdateRequest);
         assertEquals(HttpResponse.ok(expectedResponse).getStatus(), actualResponse.getStatus());
     }
 
