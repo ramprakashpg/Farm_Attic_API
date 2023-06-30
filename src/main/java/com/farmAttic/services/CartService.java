@@ -65,7 +65,7 @@ public class CartService {
             cartResponses.add(cartResponse);
         }
         UserCartResponse userCartResponse = new UserCartResponse();
-        userCartResponse.setCart(userCartDetails.get(0).getCartDetailsId().getCart());
+        userCartResponse.setCart(cart);
         userCartResponse.setUserProduct(cartResponses);
         return userCartResponse;
     }
