@@ -86,13 +86,13 @@ check.dependsOn jacocoTestCoverageVerification
 jacocoTestCoverageVerification {
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: ['com/farmAttic/Application.class', 'com/farmAttic/models'])
+            fileTree(dir: it, exclude: ['com/farmAttic/Application.class', 'com/farmAttic/models','com/farmAttic/Dtos'])
         }))
     }
     violationRules {
         rule {
             limit {
-                minimum = 0.90
+                minimum = 0.95
             }
         }
     }
