@@ -1,7 +1,10 @@
 plugins {
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("io.micronaut.application") version "3.7.9"
+    id 'jacoco'
 }
+
+apply plugin: 'jacoco'
 
 version = "0.1"
 group = "com.example"
@@ -54,6 +57,44 @@ micronaut {
     processing {
         incremental(true)
         annotations("com.farmAttic.*")
+    }
+}
+test {
+    finalizedBy jacocoTestReport
+}
+
+jacoco {
+    toolVersion = "0.8.8"
+    reportsDirectory = layout.buildDirectory.dir('reports/jacoco')
+}
+
+jacocoTestReport {
+    reports {
+        xml.required = true
+        html.required = true
+    }
+    dependsOn test
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: ['com/farmAttic/Application.class', 'com/farmAttic/models'])
+        }))
+    }
+}
+
+check.dependsOn jacocoTestCoverageVerification
+
+jacocoTestCoverageVerification {
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: ['com/farmAttic/Application.class', 'com/farmAttic/models'])
+        }))
+    }
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.90
+            }
+        }
     }
 }
 
