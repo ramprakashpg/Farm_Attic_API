@@ -109,4 +109,31 @@ public class CartDetailsServiceTest {
 
         Assertions.assertEquals(1, expectedResponse.size());
     }
+
+    @Test
+    void shouldDeleteProductFromCart() throws Throwable {
+        CartDetails cartDetails = new CartDetails();
+        CartDetailsId cartDetailsId = new CartDetailsId();
+
+        Product product = Product.builder().productId(UUID.randomUUID()).productName(productRequest.getProductName()).productDescription(productRequest.getProductDescription()).quantity(productRequest.getQuantity()).pricePerUnit(productRequest.getPricePerUnit()).user(currentUser).build();
+
+        cartDetailsId.setProduct(product);
+        userCart.setCartId(UUID.randomUUID());
+        cartDetailsId.setCart(userCart);
+
+        cartDetails.setCartDetailsId(cartDetailsId);
+        cartDetails.setQuantity(1);
+        when(productService.getProduct(any(UUID.class))).thenReturn(product);
+        when(cartDetailsRepository.findById(any(CartDetailsId.class))).thenReturn(Optional.of(cartDetails));
+
+        doNothing().when(cartDetailsRepository).delete(any(CartDetails.class));
+
+        cartDetailService.deleteProductFromCart(userCart,product.getProductId());
+
+        verify(cartDetailsRepository).delete(any(CartDetails.class));
+
+    }
+
+
+
 }
