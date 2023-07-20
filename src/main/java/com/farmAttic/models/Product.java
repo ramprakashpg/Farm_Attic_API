@@ -1,5 +1,6 @@
 package com.farmAttic.models;
 
+import com.farmAttic.Dtos.ProductCategory;
 import io.micronaut.core.annotation.Introspected;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -30,6 +31,9 @@ public class Product {
 
     @Column(name=" product_description",nullable = false)
     private String productDescription;
+
+    @Column(name = "category", nullable = false)
+    private ProductCategory productCategory;
 
     @Column(name="quantity",nullable = false)
     private int quantity;

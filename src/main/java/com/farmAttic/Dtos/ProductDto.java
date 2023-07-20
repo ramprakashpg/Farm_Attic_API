@@ -27,6 +27,8 @@ public class ProductDto {
     @NotNull
     private Integer quantity;
     @NotNull
+    private ProductCategory productCategory;
+    @NotNull
     private Integer pricePerUnit;
     @NotNull
     private List<byte []> imageList;

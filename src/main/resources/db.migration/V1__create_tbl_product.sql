@@ -10,6 +10,7 @@ create table tbm_product(
     product_id UUID DEFAULT uuid_in(md5(random()::text || random()::text)::cstring),
     product_name varchar(200),
     product_description varchar(200),
+    category varchar(20),
     price_per_unit int,
     quantity int,
     unit varchar(200),
