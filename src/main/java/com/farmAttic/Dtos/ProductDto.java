@@ -1,7 +1,11 @@
 package com.farmAttic.Dtos;
 
-import lombok.*;
 import io.micronaut.core.annotation.Introspected;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
@@ -27,7 +31,7 @@ public class ProductDto {
     @NotNull
     private Integer pricePerUnit;
     @NotNull
-    private List<byte []> imageList;
+    private List<byte[]> imageList;
 
     @NotNull
     private String unit;
