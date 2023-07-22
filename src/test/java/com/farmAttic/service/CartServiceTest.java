@@ -21,42 +21,46 @@ public class CartServiceTest {
     private CartService cartService;
     private CartDetailService cartDetailService;
 
-    private final UserAuthService userAuthService=mock(UserAuthService.class);
-    private final ProductService productService=mock(ProductService.class);
+    private final UserAuthService userAuthService = mock(UserAuthService.class);
+    private final ProductService productService = mock(ProductService.class);
     UUID uuid = UUID.randomUUID();
-    User user = new User();
 
-    ProductDto productRequest = new ProductDto();
+    ProductDto productRequest = ProductDto.builder()
+            .productDescription("description")
+            .productName("productname")
+            .pricePerUnit(13)
+            .quantity(13)
+            .userId(uuid)
+            .build();
+    User user = User.builder()
+            .userId(uuid)
+            .email("smssaddepalli@gmail.com")
+            .firstName("Sahiti")
+            .lastName("Priya")
+            .build();
+
 
     @BeforeEach
-    void beforeEach(){
+    void beforeEach() {
         cartRepository = Mockito.mock(CartRepository.class);
         cartDetailService = mock(CartDetailService.class);
-        cartService = new CartService(cartRepository,cartDetailService, productService, userAuthService);
+        cartService = new CartService(cartRepository, cartDetailService, productService, userAuthService);
         List<byte[]> productImageDtoList = new ArrayList<>();
-        productRequest.setProductDescription("description");
-        productRequest.setProductName("productName");
-        productRequest.setPricePerUnit(13);
-        productRequest.setQuantity(13);
-        productRequest.setUserId(uuid);
+
         byte[] byteArray = new byte[36];
         productImageDtoList.add(byteArray);
         productRequest.setImageList(productImageDtoList);
 
-        user.setUserId(uuid);
-        user.setEmail("smssaddepalli@gmail.com");
-        user.setFirstName("Sahiti");
-        user.setLastName("Priya");
-
     }
 
     @Test
-    void shouldAssignCartForEachUser(){
-        User loggedInUser = new User();
-        loggedInUser.setUserId(UUID.randomUUID());
-        loggedInUser.setEmail("dummy@gmail.com");
-        loggedInUser.setFirstName("dummy");
-        loggedInUser.setLastName("user");
+    void shouldAssignCartForEachUser() {
+        User loggedInUser = User.builder()
+                .userId(UUID.randomUUID())
+                .email("dummy@gmail.com")
+                .firstName("dummy")
+                .lastName("user")
+                .build();
 
         Cart userCart = new Cart();
         userCart.setUserInfo(loggedInUser);
@@ -73,23 +77,25 @@ public class CartServiceTest {
         ProductRequest productRequest1 = new ProductRequest();
         productRequest1.setProductId(UUID.randomUUID());
         productRequest1.setQuantity(2);
-        User loggedInUser = new User();
-        loggedInUser.setUserId(UUID.randomUUID());
-        loggedInUser.setEmail("dummy@gmail.com");
-        loggedInUser.setFirstName("dummy");
-        loggedInUser.setLastName("user");
+        User loggedInUser = User.builder()
+                .userId(UUID.randomUUID())
+                .email("dummy@gmail.com")
+                .firstName("dummy")
+                .lastName("user")
+                .build();
         Product product = Product.builder().productId(UUID.randomUUID()).productName("Hello").productDescription("").quantity(123).pricePerUnit(123).user(loggedInUser).build();
         Cart userCart = new Cart();
         userCart.setUserInfo(loggedInUser);
 
         when(cartRepository.findByUserId(any(UUID.class))).thenReturn(Optional.of(userCart));
 
-        cartService.addToCart(product,loggedInUser,productRequest1);
+        cartService.addToCart(product, loggedInUser, productRequest1);
 
         verify(cartDetailService).addToCart(any(CartDto.class));
 
 
     }
+
     @Test
     void addProductToCart() {
         ProductRequest productRequest1 = new ProductRequest();
@@ -104,7 +110,7 @@ public class CartServiceTest {
         when(userAuthService.getCurrentUser(any(String.class))).thenReturn(user);
         when(cartRepository.findByUserId(any(UUID.class))).thenReturn(Optional.of(userCart));
 
-        cartService.saveToCart(productRequest1,"dummy@test.com");
+        cartService.saveToCart(productRequest1, "dummy@test.com");
 
         verify(cartRepository).save(any(Cart.class));
 
@@ -132,7 +138,7 @@ public class CartServiceTest {
         when(cartDetailService.getUserCartDetails(any(UUID.class))).thenReturn(Collections.singletonList(cartDetails));
 
         UserCartResponse cartResponse = cartService.getUserCartDetails(user.getUserId());
-        Assertions.assertEquals(cartResponse.getUserProduct().size(),1);
+        Assertions.assertEquals(cartResponse.getUserProduct().size(), 1);
 
     }
 

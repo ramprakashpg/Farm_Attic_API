@@ -1,6 +1,7 @@
 package com.farmAttic.integration;
 
 import com.farmAttic.Dtos.CartUpdateRequest;
+import com.farmAttic.Dtos.ProductCategory;
 import com.farmAttic.Dtos.ProductRequest;
 import com.farmAttic.models.*;
 import com.farmAttic.repositories.*;
@@ -56,7 +57,9 @@ class CartControllerTest {
         user.setFirstName("Sahiti");
         user.setLastName("Priya");
         cart.setUserInfo(user);
-        product = Product.builder().productName("product").productDescription("description").quantity(12).pricePerUnit(12).user(user).build();
+        product = Product.builder().productName("product").productDescription("description")
+                .productCategory(ProductCategory.FRUITS)
+                .quantity(12).pricePerUnit(12).user(user).build();
         userRepository.save(user);
         productRepository.save(product);
         cartRepository.save(cart);

@@ -10,8 +10,7 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.UUID;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -32,14 +31,15 @@ public class Product {
     @Column(name=" product_description",nullable = false)
     private String productDescription;
 
-    @Column(name = "category", nullable = false)
-    private ProductCategory productCategory;
-
     @Column(name="quantity",nullable = false)
     private int quantity;
 
     @Column(name="price_per_unit",nullable = false)
     private int pricePerUnit;
+
+    @Column(name = "category", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ProductCategory productCategory;
 
     @ManyToOne
     @JoinColumn(name="user_id",referencedColumnName = "user_id")

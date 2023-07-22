@@ -1,9 +1,6 @@
 package com.farmAttic.controllers;
 
-import com.farmAttic.Dtos.CartResponse;
-import com.farmAttic.Dtos.CartUpdateRequest;
-import com.farmAttic.Dtos.ProductRequest;
-import com.farmAttic.Dtos.UserCartResponse;
+import com.farmAttic.Dtos.*;
 import com.farmAttic.models.Cart;
 import com.farmAttic.models.Product;
 import com.farmAttic.models.User;
@@ -35,7 +32,7 @@ public class CartControllerTest {
         user.setLastName("Priya");
         cart.setCartId(UUID.randomUUID());
         cart.setUserInfo(user);
-        product = Product.builder().productName("product").productDescription("description").quantity(12).pricePerUnit(12).user(user).build();
+        product = Product.builder().productName("product").productDescription("description").productCategory(ProductCategory.FRUITS).quantity(12).pricePerUnit(12).user(user).build();
 
     }
     @Test
