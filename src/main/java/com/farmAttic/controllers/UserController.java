@@ -1,7 +1,10 @@
 package com.farmAttic.controllers;
 
+import com.farmAttic.models.User;
 import com.farmAttic.services.UserAuthService;
 import io.micronaut.core.annotation.Introspected;
+import io.micronaut.http.HttpResponse;
+import io.micronaut.http.MutableHttpResponse;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Header;
@@ -13,6 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.transaction.Transactional;
+
+import java.util.UUID;
 
 import static com.farmAttic.AuthConstant.EMAIL;
 
@@ -26,9 +31,10 @@ public class UserController {
 
     @Get("/login")
     @Secured(SecurityRule.IS_AUTHENTICATED)
-    public void login(@Header("authorization") String authorizationHeader, Authentication authentication){
+    public MutableHttpResponse<UUID> login(@Header("authorization") String authorizationHeader, Authentication authentication){
         LOGGER.info("Logged in user:{}",authentication.getAttributes().get(EMAIL));
-        userAuthService.login(authorizationHeader, authentication);
+        User user = userAuthService.login(authorizationHeader, authentication);
+        return HttpResponse.ok(user.getUserId());
     }
 
 }

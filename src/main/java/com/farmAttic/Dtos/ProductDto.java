@@ -1,5 +1,6 @@
 package com.farmAttic.Dtos;
 
+import com.farmAttic.models.User;
 import io.micronaut.core.annotation.Introspected;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +20,7 @@ import java.util.UUID;
 public class ProductDto {
     private UUID productId;
     @NotNull
-    private UUID userId;
+    private User user;
     @NotNull
     private String productName;
     @NotNull

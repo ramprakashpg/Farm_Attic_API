@@ -1,0 +1,534 @@
+openapi: 3.0.1
+info:
+  contact:
+    email: Fred@gigagantic-server.com
+    name: Fred
+    url: https://gigantic-server.com
+  description: Backend API for Farm Attic application
+  license:
+    name: Copyright (c) 2022 - Farm Attic. All rights reserved.
+    url: https://www.farmattic.com
+  title: Farm Attic API
+  version: 1.1.0
+servers:
+- url: /
+paths:
+  /v1/cart/product:
+    post:
+      operationId: addProductToCart
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductRequest'
+          description: addProductToCart 200 response
+      x-contentType: application/json
+      x-accepts: application/json
+  /v1/cart/user/{userId}:
+    get:
+      operationId: getUserCartDetails
+      parameters:
+      - explode: false
+        in: path
+        name: userId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCartResponse'
+          description: getUserCartDetails 200 response
+      x-accepts: application/json
+  /v1/cart/{cartId}/product/{productId}:
+    delete:
+      operationId: deleteProductFromCart
+      parameters:
+      - explode: false
+        in: path
+        name: cartId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - explode: false
+        in: path
+        name: productId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: deleteProductFromCart 200 response
+      x-accepts: application/json
+    patch:
+      operationId: updateCart
+      parameters:
+      - explode: false
+        in: path
+        name: cartId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - explode: false
+        in: path
+        name: productId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartUpdateRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartResponse'
+          description: updateCart 200 response
+      x-contentType: application/json
+      x-accepts: application/json
+  /v1/order/user:
+    post:
+      operationId: placeOrder
+      requestBody:
+        content:
+          application/json:
+            schema:
+              format: uuid
+              type: string
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderResponse'
+          description: placeOrder 200 response
+      x-contentType: application/json
+      x-accepts: application/json
+  /v1/order/{userId}:
+    get:
+      operationId: getOrderDetails
+      parameters:
+      - explode: false
+        in: path
+        name: userId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/OrderResponse'
+                type: array
+          description: getOrderDetails 200 response
+      x-accepts: application/json
+  /v1/product:
+    get:
+      operationId: getAllProducts
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ProductDto'
+                type: array
+          description: getAllProducts 200 response
+      x-accepts: application/json
+    post:
+      operationId: saveProduct
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductDto'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductDto'
+          description: saveProduct 200 response
+      x-contentType: application/json
+      x-accepts: application/json
+  /v1/product/{productId}:
+    put:
+      operationId: updateProduct
+      parameters:
+      - explode: false
+        in: path
+        name: productId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductDto'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductDto'
+          description: updateProduct 200 response
+      x-contentType: application/json
+      x-accepts: application/json
+  /v1/product/{userId}:
+    get:
+      operationId: getUserProducts
+      parameters:
+      - explode: false
+        in: path
+        name: userId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ProductDto'
+                type: array
+          description: getUserProducts 200 response
+      x-accepts: application/json
+  /v1/user/login:
+    get:
+      operationId: login
+      responses:
+        "200":
+          description: login 200 response
+      x-accepts: application/json
+components:
+  schemas:
+    Cart:
+      example:
+        userInfo: ""
+        cartId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        cartId:
+          format: uuid
+          nullable: true
+          type: string
+        userInfo:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          nullable: true
+      type: object
+    CartResponse:
+      example:
+        product:
+          expiryDate: 2000-01-23T04:56:07.000+00:00
+          createdAt: 2000-01-23T04:56:07.000+00:00
+          unit: unit
+          quantity: 0
+          productId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          user: ""
+          productName: productName
+          productDescription: productDescription
+          productCategory: productCategory
+          pricePerUnit: 6
+          updatedAt: 2000-01-23T04:56:07.000+00:00
+        quantity: 1
+        price: 5
+      properties:
+        product:
+          $ref: '#/components/schemas/Product'
+        quantity:
+          format: int32
+          type: integer
+        price:
+          format: int32
+          type: integer
+      type: object
+    CartUpdateRequest:
+      example:
+        quantity: 0
+      properties:
+        quantity:
+          format: int32
+          type: integer
+      type: object
+    OrderResponse:
+      example:
+        cartResponseList:
+        - product:
+            expiryDate: 2000-01-23T04:56:07.000+00:00
+            createdAt: 2000-01-23T04:56:07.000+00:00
+            unit: unit
+            quantity: 0
+            productId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            user: ""
+            productName: productName
+            productDescription: productDescription
+            productCategory: productCategory
+            pricePerUnit: 6
+            updatedAt: 2000-01-23T04:56:07.000+00:00
+          quantity: 1
+          price: 5
+        - product:
+            expiryDate: 2000-01-23T04:56:07.000+00:00
+            createdAt: 2000-01-23T04:56:07.000+00:00
+            unit: unit
+            quantity: 0
+            productId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            user: ""
+            productName: productName
+            productDescription: productDescription
+            productCategory: productCategory
+            pricePerUnit: 6
+            updatedAt: 2000-01-23T04:56:07.000+00:00
+          quantity: 1
+          price: 5
+        orderId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        totalPrice: 0
+        status: status
+      properties:
+        orderId:
+          format: uuid
+          type: string
+        status:
+          type: string
+        totalPrice:
+          format: int32
+          type: integer
+        cartResponseList:
+          items:
+            $ref: '#/components/schemas/CartResponse'
+          type: array
+      type: object
+    Product:
+      example:
+        expiryDate: 2000-01-23T04:56:07.000+00:00
+        createdAt: 2000-01-23T04:56:07.000+00:00
+        unit: unit
+        quantity: 0
+        productId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        user: ""
+        productName: productName
+        productDescription: productDescription
+        productCategory: productCategory
+        pricePerUnit: 6
+        updatedAt: 2000-01-23T04:56:07.000+00:00
+      properties:
+        productId:
+          format: uuid
+          nullable: true
+          type: string
+        productName:
+          type: string
+        productDescription:
+          type: string
+        productCategory:
+          type: string
+        quantity:
+          format: int32
+          type: integer
+        pricePerUnit:
+          format: int32
+          type: integer
+        user:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          nullable: true
+        unit:
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+        expiryDate:
+          format: date-time
+          type: string
+      type: object
+    ProductCategory:
+      enum:
+      - FRUITS
+      - VEGETABLES
+      - CROPS
+      - FERTILIZERS
+      type: string
+    ProductDto:
+      example:
+        expiryDate: 2000-01-23T04:56:07.000+00:00
+        unit: unit
+        quantity: 0
+        productId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        userId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        imageList:
+        - - imageList
+          - imageList
+        - - imageList
+          - imageList
+        productName: productName
+        productDescription: productDescription
+        pricePerUnit: 6
+      properties:
+        productId:
+          format: uuid
+          type: string
+        userId:
+          format: uuid
+          type: string
+        productName:
+          type: string
+        productDescription:
+          type: string
+        quantity:
+          format: int32
+          type: integer
+        productCategory:
+          $ref: '#/components/schemas/ProductCategory'
+        pricePerUnit:
+          format: int32
+          type: integer
+        imageList:
+          items:
+            items:
+              format: byte
+              type: string
+            type: array
+          type: array
+        unit:
+          type: string
+        expiryDate:
+          format: date-time
+          type: string
+      required:
+      - expiryDate
+      - imageList
+      - pricePerUnit
+      - productCategory
+      - productDescription
+      - productName
+      - quantity
+      - unit
+      - userId
+      type: object
+    ProductRequest:
+      example:
+        quantity: 0
+        productId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        price: 6
+      properties:
+        productId:
+          format: uuid
+          type: string
+        quantity:
+          format: int32
+          type: integer
+        price:
+          format: int32
+          type: integer
+      type: object
+    User:
+      example:
+        firstName: firstName
+        lastName: lastName
+        userId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        email: email
+      properties:
+        userId:
+          format: uuid
+          nullable: true
+          type: string
+        email:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+      type: object
+    UserCartResponse:
+      example:
+        userProduct:
+        - product:
+            expiryDate: 2000-01-23T04:56:07.000+00:00
+            createdAt: 2000-01-23T04:56:07.000+00:00
+            unit: unit
+            quantity: 0
+            productId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            user: ""
+            productName: productName
+            productDescription: productDescription
+            productCategory: productCategory
+            pricePerUnit: 6
+            updatedAt: 2000-01-23T04:56:07.000+00:00
+          quantity: 1
+          price: 5
+        - product:
+            expiryDate: 2000-01-23T04:56:07.000+00:00
+            createdAt: 2000-01-23T04:56:07.000+00:00
+            unit: unit
+            quantity: 0
+            productId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            user: ""
+            productName: productName
+            productDescription: productDescription
+            productCategory: productCategory
+            pricePerUnit: 6
+            updatedAt: 2000-01-23T04:56:07.000+00:00
+          quantity: 1
+          price: 5
+        user:
+          firstName: firstName
+          lastName: lastName
+          userId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          email: email
+        cart:
+          userInfo: ""
+          cartId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        cart:
+          $ref: '#/components/schemas/Cart'
+        userProduct:
+          items:
+            $ref: '#/components/schemas/CartResponse'
+          type: array
+      type: object
+
