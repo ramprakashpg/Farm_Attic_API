@@ -17,7 +17,7 @@ import java.util.UUID;
 @Introspected
 @Entity
 @Table(name="tbm_user_details")
-public class UserInfo {
+public class    UserInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id",unique = true,nullable = false ,length = 36)

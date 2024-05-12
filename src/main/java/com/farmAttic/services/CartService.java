@@ -38,7 +38,7 @@ public class CartService {
     }
 
     public Cart getUserCart(User loggedInUser) {
-        return cartRepository.findByUserId(loggedInUser.getUserId()).orElse(new Cart());
+        return cartRepository.findByUserId(loggedInUser.getUserId()).orElseThrow();
     }
 
     public ProductRequest addToCart(Product product, User user, ProductRequest productRequest) {
@@ -56,10 +56,7 @@ public class CartService {
         List<CartDetails> userCartDetails = cartDetailService.getUserCartDetails(cart.getCartId());
         List<CartResponse> cartResponses = new ArrayList<>();
         for (CartDetails cartDetail : userCartDetails) {
-            CartResponse cartResponse = new CartResponse();
-            cartResponse.setProduct(cartDetail.getCartDetailsId().getProduct());
-            cartResponse.setPrice(cartDetail.getPrice());
-            cartResponse.setQuantity(cartDetail.getQuantity());
+            CartResponse cartResponse = new CartResponse(cartDetail.getCartDetailsId().getProduct(), cartDetail.getQuantity(), cartDetail.getPrice());
             cartResponses.add(cartResponse);
         }
         UserCartResponse userCartResponse = new UserCartResponse();
@@ -88,7 +85,7 @@ public class CartService {
 
         if (product.getProductId() != null && productRequest.getQuantity() <= product.getQuantity()) {
             return addToCart(product, currentUser, productRequest);
-        }else{
+        } else {
             throw new NoSuchElementException("Product not found");
         }
     }
@@ -108,6 +105,6 @@ public class CartService {
     }
 
     public List<CartDetails> getDetails(Cart cart) {
-       return cartDetailService.getDetails(cart);
+        return cartDetailService.getDetails(cart);
     }
 }

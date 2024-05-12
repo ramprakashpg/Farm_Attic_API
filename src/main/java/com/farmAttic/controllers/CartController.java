@@ -38,6 +38,7 @@ public class CartController {
         return HttpResponse.ok(cartResponse);
     }
 
+    //Can remove this for now.
     @Patch(value = "/{cartId}/product/{productId}", produces = MediaType.APPLICATION_JSON)
     @Secured(SecurityRule.IS_AUTHENTICATED)
     public HttpResponse<CartResponse> updateCart(Authentication authentication, @PathVariable("cartId") UUID cartId, @PathVariable("productId") UUID productId, @Body CartUpdateRequest updateRequest) throws Throwable {
