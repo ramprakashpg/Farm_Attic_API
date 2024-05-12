@@ -1,21 +1,18 @@
 package com.farmAttic.models;
 
 import io.micronaut.core.annotation.Introspected;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
+@Data
 
 @Introspected
 @Entity
+@Builder
 @Table(name="tbm_user")
 public class User {
 

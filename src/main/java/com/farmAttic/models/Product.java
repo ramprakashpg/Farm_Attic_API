@@ -1,5 +1,6 @@
 package com.farmAttic.models;
 
+import com.farmAttic.Dtos.ProductCategory;
 import io.micronaut.core.annotation.Introspected;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -9,8 +10,7 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.UUID;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -36,6 +36,10 @@ public class Product {
 
     @Column(name="price_per_unit",nullable = false)
     private int pricePerUnit;
+
+    @Column(name = "category", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ProductCategory productCategory;
 
     @ManyToOne
     @JoinColumn(name="user_id",referencedColumnName = "user_id")

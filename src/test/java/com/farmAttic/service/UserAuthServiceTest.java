@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.mockito.Mockito.*;
 
@@ -26,7 +27,7 @@ class UserAuthServiceTest {
 
 
     @BeforeEach
-    void beforeEach(){
+    void beforeEach() {
         userRepository = mock(UserRepository.class);
         userAuthService = new UserAuthService(userRepository, userInfoClient);
     }
@@ -37,10 +38,12 @@ class UserAuthServiceTest {
         Map<String, Object> authMap = new HashMap<>();
         authMap.put("sub", email);
 
-        User currentUser = new User();
-        currentUser.setEmail("dummy@gmail.com");
-        currentUser.setFirstName("Dummy");
-        currentUser.setLastName("Name");
+
+        User currentUser = User.builder()
+                .email("dummy@gmail.com")
+                .firstName("Dummy")
+                .lastName("Name")
+                .build();
 
         UserDto loggedInUserInfo = new UserDto();
         loggedInUserInfo.setEmail(email);
@@ -53,7 +56,7 @@ class UserAuthServiceTest {
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(currentUser));
         when(userInfoClient.getUserInfo(authHeader)).thenReturn(loggedInUserInfo);
 
-        userAuthService.login(authHeader,authentication);
+        userAuthService.login(authHeader, authentication);
         verify(userRepository).save(any());
     }
 }

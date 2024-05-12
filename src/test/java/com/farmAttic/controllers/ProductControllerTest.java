@@ -1,5 +1,6 @@
 package com.farmAttic.controllers;
 
+import com.farmAttic.Dtos.ProductCategory;
 import com.farmAttic.Dtos.ProductDto;
 import com.farmAttic.models.User;
 import com.farmAttic.services.ProductService;
@@ -39,6 +40,7 @@ public class ProductControllerTest {
         product.setProductName("productName");
         product.setPricePerUnit(13);
         product.setQuantity(13);
+        product.setProductCategory(ProductCategory.FRUITS);
         UUID uuid = UUID.randomUUID();
         product.setUserId(uuid);
         byte[] byteArray = new byte[36];

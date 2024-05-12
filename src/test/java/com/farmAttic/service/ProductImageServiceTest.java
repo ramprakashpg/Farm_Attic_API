@@ -1,5 +1,6 @@
 package com.farmAttic.service;
 
+import com.farmAttic.Dtos.ProductCategory;
 import com.farmAttic.Dtos.ProductDto;
 import com.farmAttic.models.Product;
 import com.farmAttic.models.ProductImage;
@@ -39,6 +40,7 @@ class ProductImageServiceTest {
         productRequest.setProductName("productName");
         productRequest.setPricePerUnit(13);
         productRequest.setQuantity(13);
+        productRequest.setProductCategory(ProductCategory.FRUITS);
         productRequest.setUserId(uuid);
         byte[] byteArray = new byte[36];
         productImageDtoList.add(byteArray);

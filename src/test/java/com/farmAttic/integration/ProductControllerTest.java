@@ -1,5 +1,6 @@
 package com.farmAttic.integration;
 
+import com.farmAttic.Dtos.ProductCategory;
 import com.farmAttic.models.Product;
 import com.farmAttic.models.User;
 import com.farmAttic.repositories.CartRepository;
@@ -65,7 +66,7 @@ class ProductControllerTest {
         user.setEmail("dummy@test.com");
         user.setFirstName("Sahiti");
         user.setLastName("Priya");
-        Product product = Product.builder().productName("product").productDescription("description").quantity(12).pricePerUnit(12).user(user).build();
+        Product product = Product.builder().productName("product").productDescription("description").productCategory(ProductCategory.FRUITS).quantity(12).pricePerUnit(12).user(user).build();
 
         userRepository.save(user);
         productRepository.save(product);
@@ -73,7 +74,7 @@ class ProductControllerTest {
         entityManager.clear();
         entityManager.close();
 
-        String expectedResponse = "[{\"productId\":\"" + product.getProductId() + "\",\"userId\":\"" + user.getUserId() + "\",\"productName\":\"product\",\"productDescription\":\"description\",\"quantity\":12,\"pricePerUnit\":12}]";
+        String expectedResponse = "[{\"productId\":\"" + product.getProductId() + "\",\"userId\":\"" + user.getUserId() + "\",\"productName\":\"product\",\"productDescription\":\"description\",\"quantity\":12,\"productCategory\":\"FRUITS\",\"pricePerUnit\":12}]";
         String actualResponse = client.toBlocking().retrieve(HttpRequest.GET("v1/product").bearerAuth("anything"), String.class);
 
         assertEquals(expectedResponse, actualResponse);
@@ -125,6 +126,7 @@ class ProductControllerTest {
                 "    \"productDescription\": \"sahiti\",\n" +
                 "    \"productName\": \"connsadain\",\n" +
                 "    \"quantity\": 50,\n" +
+                "     \"productCategory\":\"FRUITS\",\n"+
                 "    \"pricePerUnit\":57,\n" +
                 "    \"unit\":\"kg\",\n" +
                 "    \"expiryDate\":1234,\n" +
@@ -136,7 +138,7 @@ class ProductControllerTest {
 
         List<Product> product = productRepository.findAll();
 
-        String expectedResponse = "{\"productId\":\"" + product.get(0).getProductId() + "\",\"userId\":\"" + user.getUserId() + "\",\"productName\":\"connsadain\",\"productDescription\":\"sahiti\",\"quantity\":50,\"pricePerUnit\":57,\"unit\":\"kg\",\"expiryDate\":1234}";
+        String expectedResponse = "{\"productId\":\"" + product.get(0).getProductId() + "\",\"userId\":\"" + user.getUserId() + "\",\"productName\":\"connsadain\",\"productDescription\":\"sahiti\",\"quantity\":50,\"productCategory\":\"FRUITS\",\"pricePerUnit\":57,\"unit\":\"kg\",\"expiryDate\":1234}";
 
         Assertions.assertEquals(expectedResponse, actualResponse);
 
@@ -148,7 +150,7 @@ class ProductControllerTest {
         user.setEmail("dummy@test.com");
         user.setFirstName("Sahiti");
         user.setLastName("Priya");
-        Product product = Product.builder().productName("product").productDescription("description").quantity(12).pricePerUnit(12).expiryDate(new Date(2022, Calendar.FEBRUARY,1)).user(user).build();
+        Product product = Product.builder().productName("product").productDescription("description").productCategory(ProductCategory.FRUITS).quantity(12).pricePerUnit(12).expiryDate(new Date(2022, Calendar.FEBRUARY,1)).user(user).build();
 
         userRepository.save(user);
         productRepository.save(product);
@@ -161,6 +163,7 @@ class ProductControllerTest {
                 "    \"productDescription\": \"sahiti\",\n" +
                 "    \"productName\": \"connsadain\",\n" +
                 "    \"quantity\": 50,\n" +
+                "     \"productCategory\":\"FRUITS\",\n"+
                 "    \"pricePerUnit\":57,\n" +
                 "    \"unit\":\"kg\",\n" +
                 "    \"expiryDate\":1687782675939,\n" +
@@ -170,7 +173,7 @@ class ProductControllerTest {
         String actualResponse = client.toBlocking().retrieve(HttpRequest.PUT("v1/product/" + product.getProductId(), dataRequest)
                 .bearerAuth("anything"));
 
-        String expectedResponse = "{\"productId\":\""+product.getProductId()+"\",\"userId\":\""+user.getUserId()+"\",\"productName\":\"connsadain\",\"productDescription\":\"sahiti\",\"quantity\":50,\"pricePerUnit\":57,\"expiryDate\":1687782675939}";
+        String expectedResponse = "{\"productId\":\""+product.getProductId()+"\",\"userId\":\""+user.getUserId()+"\",\"productName\":\"connsadain\",\"productDescription\":\"sahiti\",\"quantity\":50,\"productCategory\":\"FRUITS\",\"pricePerUnit\":57,\"expiryDate\":1687782675939}";
 
         assertEquals(expectedResponse, actualResponse);
         assertEquals(expectedResponse, actualResponse);

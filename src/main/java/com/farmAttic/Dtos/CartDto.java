@@ -2,15 +2,11 @@ package com.farmAttic.Dtos;
 
 import com.farmAttic.models.Cart;
 import com.farmAttic.models.Product;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class CartDto {

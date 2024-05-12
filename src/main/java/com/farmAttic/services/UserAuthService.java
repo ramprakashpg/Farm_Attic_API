@@ -20,12 +20,13 @@ public class UserAuthService {
     private UserInfoClient userInfoClient;
     private static final ModelMapper modelMapper = new ModelMapper();
 
-    public void login(String authorizationHeader, Authentication authentication) {
+    public User login(String authorizationHeader, Authentication authentication) {
         String email = authentication.getAttributes().get(EMAIL).toString();
         User currentUser = getCurrentUser(email);
         if(currentUser.getUserId() == null) {
             currentUser = saveUserInfo(authorizationHeader);
         }
+        return currentUser;
 
     }
 

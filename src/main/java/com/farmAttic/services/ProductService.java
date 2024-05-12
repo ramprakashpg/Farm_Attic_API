@@ -26,7 +26,7 @@ public class ProductService {
 
 
     public ProductDto saveProductInformation(ProductDto productRequest) {
-        User user = userAuthService.getUser(productRequest.getUserId());
+        User user = userAuthService.getUser(productRequest.getUser().getUserId());
         Product product = modelMapper.map(productRequest, Product.class);
         product.setUser(user);
         productRepository.save(product);
@@ -35,7 +35,7 @@ public class ProductService {
 
     public List<ProductDto> getUserProducts(UUID userId) {
         List<ProductDto> productsResponse = getProducts();
-        return productsResponse.stream().filter(eachProduct -> eachProduct.getUserId().equals(userId)).collect(Collectors.toList());
+        return productsResponse.stream().filter(eachProduct -> eachProduct.getUser().equals(userId)).collect(Collectors.toList());
     }
 
     public List<ProductDto> getProducts() {
@@ -56,7 +56,7 @@ public class ProductService {
 
     public ProductDto updateProduct(UUID productId, ProductDto productRequest) {
         Product product = productRepository.findById(productId).orElseThrow();
-        User user = userAuthService.getUser(productRequest.getUserId());
+        User user = userAuthService.getUser(productRequest.getUser().getUserId());
         product.setProductName(productRequest.getProductName());
         product.setProductDescription(productRequest.getProductDescription());
         product.setPricePerUnit(productRequest.getPricePerUnit());
