@@ -38,7 +38,7 @@ public class CartDetailsServiceTest {
         productRequest.setProductName("productName");
         productRequest.setPricePerUnit(13);
         productRequest.setQuantity(13);
-        productRequest.setUserId(UUID.randomUUID());
+//        productRequest.setUserId(UUID.randomUUID());
 
         currentUser.setEmail("dummy@gmail.com");
         currentUser.setFirstName("Dummy");

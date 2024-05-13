@@ -42,7 +42,7 @@ public class ProductControllerTest {
         product.setQuantity(13);
         product.setProductCategory(ProductCategory.FRUITS);
         UUID uuid = UUID.randomUUID();
-        product.setUserId(uuid);
+//        product.setUserId(uuid);
         byte[] byteArray = new byte[36];
         productImageDtoList.add(byteArray);
         product.setImageList(productImageDtoList);
@@ -97,7 +97,7 @@ public class ProductControllerTest {
         UUID uuid = UUID.randomUUID();
 
         when(productService.updateProduct(uuid, product)).thenReturn(product);
-        when(userAuthService.getUser(product.getUserId())).thenReturn(user);
+//        when(userAuthService.getUser(product.getUserId())).thenReturn(user);
 
         HttpResponse<ProductDto> actualResponse = productController.updateProduct(uuid, product,authentication);
 

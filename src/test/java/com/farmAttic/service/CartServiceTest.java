@@ -30,7 +30,7 @@ public class CartServiceTest {
             .productName("productname")
             .pricePerUnit(13)
             .quantity(13)
-            .userId(uuid)
+//            .userId(uuid)
             .build();
     User user = User.builder()
             .userId(uuid)

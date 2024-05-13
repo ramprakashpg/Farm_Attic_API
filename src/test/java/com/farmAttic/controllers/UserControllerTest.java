@@ -16,7 +16,7 @@ public class UserControllerTest {
         String authHeader = "authHeader";
         doNothing().when(userAuthService).login(authHeader,authentication);
 
-        userController.login(authHeader,authentication);
+//        userController.login(authHeader,authentication);
         verify(userAuthService).login(authHeader,authentication);
 
     }

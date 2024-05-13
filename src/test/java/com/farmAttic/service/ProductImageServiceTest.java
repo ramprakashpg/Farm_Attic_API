@@ -41,7 +41,7 @@ class ProductImageServiceTest {
         productRequest.setPricePerUnit(13);
         productRequest.setQuantity(13);
         productRequest.setProductCategory(ProductCategory.FRUITS);
-        productRequest.setUserId(uuid);
+//        productRequest.setUserId(uuid);
         byte[] byteArray = new byte[36];
         productImageDtoList.add(byteArray);
         productRequest.setImageList(productImageDtoList);

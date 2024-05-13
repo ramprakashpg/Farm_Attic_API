@@ -13,13 +13,14 @@ micronaut:
     enabled: true
     token:
       jwt:
-        enabled: true
-        claims-validators:
-          issuer: '${OIDC_ISSUER:`https://dev-72143172.okta.com/oauth2/default`}'
         signatures:
-          jwks:
-            okta:
-              url: '${OIDC_ISSUER:`https://dev-72143172.okta.com/oauth2/default`}/v1/keys'
+          secret:
+            generator:
+              secret: 'cGxlYXNlQ2hhbmdlVGhpc1NlY3JldEZvckFOZXdPbmU='
+              base64: true
+              access-token:
+                expiration: 10000
+    authentication: bearer
 
   router:
     static-resources:
@@ -40,8 +41,8 @@ datasources:
   default:
     url: jdbc:postgresql://localhost:5432/postgresql?sslmode=disable
     driver-class-name: org.postgresql.Driver
-    username: ${USER}
-    password: ${USER}
+    username: postgres
+    password: postgres
     dialect : POSTGRES
 
 

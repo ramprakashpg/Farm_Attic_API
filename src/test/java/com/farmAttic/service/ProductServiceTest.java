@@ -38,7 +38,7 @@ public class ProductServiceTest {
             .productCategory(ProductCategory.FRUITS)
             .pricePerUnit(13)
             .quantity(13)
-            .userId(uuid)
+//            .userId(uuid)
             .build();
     User user = User.builder()
             .userId(uuid)
@@ -78,7 +78,7 @@ public class ProductServiceTest {
     @Test
     void shouldSaveProductDetails() {
 
-        when(userAuthService.getUser(productRequest.getUserId())).thenReturn(user);
+//        when(userAuthService.getUser(productRequest.getUserId())).thenReturn(user);
         when(productRepository.save(any(Product.class))).thenReturn(product);
 
         productService.saveProductInformation(productRequest);
@@ -119,7 +119,7 @@ public class ProductServiceTest {
         product.setProductId(productId);
 
         when(productRepository.findById(productId)).thenReturn(Optional.ofNullable(product));
-        when(userAuthService.getUser(productRequest.getUserId())).thenReturn(user);
+//        when(userAuthService.getUser(productRequest.getUserId())).thenReturn(user);
         when(productRepository.update(product)).thenReturn(product);
 
         productService.updateProduct(productId, productRequest);
@@ -135,7 +135,7 @@ public class ProductServiceTest {
         productRequest.setImageList(new ArrayList<>());
 
         when(productRepository.findById(productId)).thenReturn(Optional.ofNullable(product));
-        when(userAuthService.getUser(productRequest.getUserId())).thenReturn(user);
+//        when(userAuthService.getUser(productRequest.getUserId())).thenReturn(user);
         when(productRepository.update(product)).thenReturn(product);
 
         productService.updateProduct(productId, productRequest);
