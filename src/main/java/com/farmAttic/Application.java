@@ -21,9 +21,7 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
                 title = "Farm Attic API",
                 version = "1.1.0",
                 description = "Backend API for Farm Attic application",
-                license = @License(name = "Copyright (c) 2022 - Farm Attic. All rights reserved.", url = "https://www.farmattic.com"),
-                contact = @Contact(url = "https://gigantic-server.com", name = "Fred", email = "Fred@gigagantic-server.com")
-
+                license = @License(name = "Copyright (c) 2022 - Farm Attic. All rights reserved.", url = "https://www.farmattic.com")
         )
 )
 public class Application {

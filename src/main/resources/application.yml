@@ -1,4 +1,10 @@
 micronaut:
+  session:
+    http:
+      cookie: false
+      header: true
+      redis:
+        enabled: true
   http:
     client:
       read-timeout: 1m
@@ -18,8 +24,6 @@ micronaut:
             generator:
               secret: 'cGxlYXNlQ2hhbmdlVGhpc1NlY3JldEZvckFOZXdPbmU='
               base64: true
-              access-token:
-                expiration: 10000
     authentication: bearer
 
   router:

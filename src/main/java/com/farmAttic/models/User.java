@@ -3,7 +3,7 @@ package com.farmAttic.models;
 import io.micronaut.core.annotation.Introspected;
 import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.UUID;
 
 @NoArgsConstructor

@@ -27,7 +27,7 @@ public class ProductSchedulerService {
         calendar.add(Calendar.DAY_OF_YEAR, 1);
         LOGGER.info("Cleaning up the expired product quantity");
         Date currentDate= calendar.getTime();
-        productService.clearProductQuantity(currentDate);
+//        productService.clearProductQuantity(currentDate);
     }
 
 }
