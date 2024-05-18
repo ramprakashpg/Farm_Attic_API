@@ -1,10 +1,4 @@
 micronaut:
-  session:
-    http:
-      cookie: false
-      header: true
-      redis:
-        enabled: true
   http:
     client:
       read-timeout: 1m
@@ -16,7 +10,6 @@ micronaut:
     cors:
       enabled: true
   security:
-    enabled: true
     token:
       jwt:
         signatures:
@@ -25,7 +18,6 @@ micronaut:
               secret: 'cGxlYXNlQ2hhbmdlVGhpc1NlY3JldEZvckFOZXdPbmU='
               base64: true
     authentication: bearer
-
   router:
     static-resources:
       swagger:
