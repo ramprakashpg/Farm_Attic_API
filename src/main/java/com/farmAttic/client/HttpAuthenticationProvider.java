@@ -11,10 +11,9 @@ import jakarta.inject.Singleton;
 @Singleton
 public class HttpAuthenticationProvider implements HttpRequestAuthenticationProvider {
 
-
     @Override
     public @NonNull AuthenticationResponse authenticate(Object requestContext, @NonNull AuthenticationRequest authRequest) {
-        return authRequest.getIdentity().equals("sherlock") && authRequest.getSecret().equals("password")
+        return authRequest.getIdentity().equals("sherlock12") && authRequest.getSecret().equals("password")
                 ? AuthenticationResponse.success(authRequest.getIdentity().toString())
                 : AuthenticationResponse.failure(AuthenticationFailureReason.CREDENTIALS_DO_NOT_MATCH);
     }

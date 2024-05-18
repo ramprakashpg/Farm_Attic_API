@@ -38,15 +38,15 @@ public class UserController {
         User user = userAuthService.login(authorizationHeader, authentication);
         return HttpResponse.ok(user.getUserId());
     }
-    @Post("/login")
-    User setupLoggedInUser(Session session, String name){
-        return session.get("user", User.class).orElseGet(()->
-        {
-            User newUser = new User(UUID.randomUUID(), "email", "name1", "name2");
-            session.put("user", newUser);
-            return newUser;
-
-        });
-    }
+//    @Post("/login")
+//    User setupLoggedInUser(Session session, String name){
+//        return session.get("user", User.class).orElseGet(()->
+//        {
+//            User newUser = new User(UUID.randomUUID(), "email", "name1", "name2");
+//            session.put("user", newUser);
+//            return newUser;
+//
+//        });
+//    }
 
 }

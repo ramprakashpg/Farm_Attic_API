@@ -54,7 +54,7 @@ class UserAuthServiceTest {
 
         when(authentication.getAttributes()).thenReturn(authMap);
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(currentUser));
-        when(userInfoClient.getUserInfo(authHeader)).thenReturn(loggedInUserInfo);
+//        when(userInfoClient.getUserInfo(authHeader)).thenReturn(loggedInUserInfo);
 
         userAuthService.login(authHeader, authentication);
         verify(userRepository).save(any());

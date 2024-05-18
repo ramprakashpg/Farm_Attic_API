@@ -10,13 +10,13 @@ micronaut:
     cors:
       enabled: true
   security:
+    enabled: true
     token:
       jwt:
         signatures:
           secret:
             generator:
-              secret: 'cGxlYXNlQ2hhbmdlVGhpc1NlY3JldEZvckFOZXdPbmU='
-              base64: true
+              secret: "cGxlYXNlQ2hhbmdlVGhpc1NlY3JldEZvckFOZXdPbmU"
     authentication: bearer
   router:
     static-resources:
