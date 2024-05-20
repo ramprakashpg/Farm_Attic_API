@@ -1,9 +1,12 @@
 package com.farmAttic.models;
 
 import io.micronaut.core.annotation.Introspected;
-import lombok.*;
-
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -13,12 +16,12 @@ import java.util.UUID;
 @Introspected
 @Entity
 @Builder
-@Table(name="tbm_user")
+@Table(name = "tbm_user")
 public class User {
 
     @Id
     @GeneratedValue
-    @Column(name = "user_id",unique = true,nullable = false ,length = 36)
+    @Column(name = "user_id", unique = true, nullable = false, length = 36)
     private UUID userId;
 
     @Column(name = "email", nullable = false)
@@ -29,4 +32,7 @@ public class User {
 
     @Column(name = "last_name", nullable = false)
     private String lastName;
+
+    @Column(name = "password", nullable = false)
+    private String password;
 }

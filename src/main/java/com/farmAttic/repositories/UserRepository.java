@@ -15,5 +15,5 @@ public interface UserRepository extends CrudRepository<User, UUID> {
 
     @Executable
     @Query("select user from User user where user.email =:email")
-    Optional<User> findByEmail(String email);
+    User findByEmail(String email);
 }

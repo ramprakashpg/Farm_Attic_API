@@ -3,6 +3,7 @@ create table tbm_user(
     email varchar(200),
     first_name varchar,
     last_name varchar,
+    password varchar,
     CONSTRAINT tbm_user_pk PRIMARY KEY (user_id)
 );
 
