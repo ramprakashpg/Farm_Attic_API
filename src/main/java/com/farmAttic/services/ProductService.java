@@ -110,7 +110,7 @@ public class ProductService {
 
 
     private ProductDto updateImage(Product product, ProductDto productRequest) {
-        if (productRequest.getImageList().size() != 0) {
+        if (!productRequest.getImageList().isEmpty()) {
             productImageService.deleteImages(product.getProductId());
             return saveImage(product, productRequest);
         } else {

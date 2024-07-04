@@ -13,6 +13,7 @@ import java.util.UUID;
 @Repository
 public interface ProductImageRepository extends CrudRepository<ProductImage, UUID> {
 
+
     @Executable
     @Query("select productImage from ProductImage  productImage where productImage.product=:product")
     List<ProductImage> findByProduct(Product product);

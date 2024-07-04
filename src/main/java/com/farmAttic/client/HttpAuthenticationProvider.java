@@ -18,7 +18,7 @@ public class HttpAuthenticationProvider implements HttpRequestAuthenticationProv
     @Override
     public @NonNull AuthenticationResponse authenticate(Object requestContext, @NonNull AuthenticationRequest authRequest) {
         if (authRequest.getIdentity().equals("sherlock12") && authRequest.getSecret().equals("password")) {
-            authService.login(authRequest.getIdentity().toString());
+//            authService.login(authRequest.getIdentity().toString());
             return AuthenticationResponse.success(authRequest.getIdentity().toString());
         } else {
             return AuthenticationResponse.failure(AuthenticationFailureReason.CREDENTIALS_DO_NOT_MATCH);

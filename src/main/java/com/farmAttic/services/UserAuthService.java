@@ -21,7 +21,7 @@ public class UserAuthService {
     private UserRepository userRepository;
     private UserInfoClient userInfoClient;
     private static final ModelMapper modelMapper = new ModelMapper();
-    private StatefulRedisConnection<String, UserDto> connection;
+//    private StatefulRedisConnection<String, UserDto> connection;
 
     public User login(String authorizationHeader, Authentication authentication) {
         String email = authentication.getAttributes().get(EMAIL).toString();
@@ -33,14 +33,14 @@ public class UserAuthService {
 
     }
 
-    public void login(String username) {
-        User loggedInUser = userRepository.findByEmail(username);
-        //Can't store POJO objects in redis. Micronaut doesnt support
-        UserDto newUser = new UserDto(loggedInUser.getUserId(), loggedInUser.getEmail(), loggedInUser.getFirstName(), loggedInUser.getLastName());
-        RedisCommands<String, UserDto> redisCommands = connection.sync();
-        redisCommands.set("user", newUser);
-        redisCommands.expire("user", 24);
-    }
+//    public void login(String username) {
+//        User loggedInUser = userRepository.findByEmail(username);
+//        //NOTE: Can't store POJO objects in redis. Micronaut doesnt support
+//        UserDto newUser = new UserDto(loggedInUser.getUserId(), loggedInUser.getEmail(), loggedInUser.getFirstName(), loggedInUser.getLastName());
+//        RedisCommands<String, UserDto> redisCommands = connection.sync();
+//        redisCommands.set("user", newUser);
+//        redisCommands.expire("user", 24);
+//    }
 
     public User getCurrentUser(String email) {
         return userRepository.findByEmail(email);

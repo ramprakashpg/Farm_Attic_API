@@ -13,12 +13,9 @@ import java.util.Date;
 @Singleton
 public class ProductSchedulerService {
 
-    private final ProductService productService;
-
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductSchedulerService.class);
 
     public ProductSchedulerService(ProductService productService) {
-        this.productService = productService;
     }
 
     @Scheduled(fixedDelay = "1d")
