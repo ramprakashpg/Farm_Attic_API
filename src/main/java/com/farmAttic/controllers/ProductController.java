@@ -1,6 +1,7 @@
 package com.farmAttic.controllers;
 
 import com.farmAttic.Dtos.ProductDto;
+import com.farmAttic.models.User;
 import com.farmAttic.services.ProductService;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.http.HttpResponse;
@@ -16,6 +17,8 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
+
+import static com.farmAttic.AuthConstant.EMAIL;
 
 @io.micronaut.http.annotation.Controller("v1/product")
 @Introspected
@@ -34,7 +37,7 @@ public class ProductController {
     @Post(produces = MediaType.APPLICATION_JSON)
     @Secured(SecurityRule.IS_AUTHENTICATED)
     public HttpResponse<ProductDto> saveProduct( @Valid @Body ProductDto productRequest, Authentication authentication){
-        LOGGER.info("{} : Save Product",authentication.getName());
+        LOGGER.info("{} : Save Product",authentication.getAttributes().get(EMAIL).toString());
         ProductDto productResponse= productService.saveProductInformation(productRequest);
         return HttpResponse.created(productResponse);
     }
@@ -42,7 +45,7 @@ public class ProductController {
     @Get(produces = MediaType.APPLICATION_JSON)
     @Secured(SecurityRule.IS_AUTHENTICATED)
     public HttpResponse<List<ProductDto>> getAllProducts(Authentication authentication){
-        LOGGER.info("Get all product details: {}",authentication.getName());
+        LOGGER.info("Get all product details: {}",authentication.getAttributes());
         List<ProductDto> productsResponseList=productService.getProducts();
         return HttpResponse.ok(productsResponseList);
     }

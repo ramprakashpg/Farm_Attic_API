@@ -4,9 +4,8 @@ import com.farmAttic.Dtos.UserDto;
 import com.farmAttic.client.UserInfoClient;
 import com.farmAttic.models.User;
 import com.farmAttic.repositories.UserRepository;
-import io.lettuce.core.api.StatefulRedisConnection;
-import io.lettuce.core.api.sync.RedisCommands;
 import io.micronaut.security.authentication.Authentication;
+import io.micronaut.session.Session;
 import jakarta.inject.Singleton;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -21,25 +20,21 @@ public class UserAuthService {
     private UserRepository userRepository;
     private UserInfoClient userInfoClient;
     private static final ModelMapper modelMapper = new ModelMapper();
-//    private StatefulRedisConnection<String, UserDto> connection;
+//    private final Session session;
 
-    public User login(String authorizationHeader, Authentication authentication) {
+    public User login(Authentication authentication) {
         String email = authentication.getAttributes().get(EMAIL).toString();
-        User currentUser = getCurrentUser(email);
-        if (currentUser.getUserId() == null) {
-            currentUser = saveUserInfo(authorizationHeader);
-        }
-        return currentUser;
+        return getCurrentUser(email);
 
     }
 
 //    public void login(String username) {
 //        User loggedInUser = userRepository.findByEmail(username);
 //        //NOTE: Can't store POJO objects in redis. Micronaut doesnt support
-//        UserDto newUser = new UserDto(loggedInUser.getUserId(), loggedInUser.getEmail(), loggedInUser.getFirstName(), loggedInUser.getLastName());
-//        RedisCommands<String, UserDto> redisCommands = connection.sync();
-//        redisCommands.set("user", newUser);
-//        redisCommands.expire("user", 24);
+//        if (loggedInUser != null) {
+//            System.out.println("Logged in user: " + loggedInUser.getEmail());
+//            session.put("user", loggedInUser);
+//        }
 //    }
 
     public User getCurrentUser(String email) {
