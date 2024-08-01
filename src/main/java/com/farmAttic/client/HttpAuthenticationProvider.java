@@ -1,10 +1,8 @@
 package com.farmAttic.client;
 
 
-import com.farmAttic.models.User;
 import com.farmAttic.services.UserAuthService;
 import io.micronaut.core.annotation.NonNull;
-import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.authentication.AuthenticationFailureReason;
 import io.micronaut.security.authentication.AuthenticationRequest;
 import io.micronaut.security.authentication.AuthenticationResponse;
@@ -15,15 +13,18 @@ import lombok.AllArgsConstructor;
 @Singleton
 @AllArgsConstructor
 public class HttpAuthenticationProvider implements HttpRequestAuthenticationProvider {
-    private UserAuthService authService;
-
+    private UserAuthService userAuthService;
 
     @Override
     public @NonNull AuthenticationResponse authenticate(Object requestContext, @NonNull AuthenticationRequest authRequest) {
-        if (authRequest.getIdentity().equals("sherlock12") && authRequest.getSecret().equals("password")) {
+        if (isUsernameValid(authRequest)) {
             return AuthenticationResponse.success(authRequest.getIdentity().toString());
         } else {
             return AuthenticationResponse.failure(AuthenticationFailureReason.CREDENTIALS_DO_NOT_MATCH);
         }
+    }
+
+    private boolean isUsernameValid(AuthenticationRequest authRequest) {
+        return userAuthService.isValid(authRequest.getIdentity(), authRequest.getSecret());
     }
 }
